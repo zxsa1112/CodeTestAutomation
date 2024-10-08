@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'io.cucumber' version '7.10.0' // Cucumber 플러그인 추가 (필요에 따라 버전 조정)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Gradle 테스트 라이브러리
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 라이브러리
+    implementation 'io.cucumber:cucumber-java:7.10.0' // Cucumber Java 라이브러리
+    implementation 'io.cucumber:cucumber-junit:7.10.0' // Cucumber JUnit 통합 라이브러리
+}
+
+test {
+    useJUnitPlatform() // JUnit 5 사용
+}
