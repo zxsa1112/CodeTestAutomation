@@ -40,6 +40,7 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: java
+          build-command: ./gradlew build
 
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v2
