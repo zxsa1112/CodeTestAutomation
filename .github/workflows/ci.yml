@@ -19,6 +19,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Make Gradlew executable
+        run: chmod +x gradlew  # 실행 권한 추가
+
       - name: Build with Gradle
         run: ./gradlew build
 
