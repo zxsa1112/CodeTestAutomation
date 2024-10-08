@@ -28,6 +28,11 @@ jobs:
         APP_SECRET: ${{ secrets.APP_SECRET }}
       run: ./gradlew test
 
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: 'java'
+
     - name: Analyze with CodeQL
       uses: github/codeql-action/analyze@v2
       with:
