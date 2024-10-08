@@ -19,6 +19,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Clear Gradle cache
+        run: rm -rf ~/.gradle/caches/
+
       - name: Make Gradlew executable
         run: chmod +x gradlew  # 실행 권한 추가
 
