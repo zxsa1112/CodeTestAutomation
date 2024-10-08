@@ -14,6 +14,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
+        distribution: 'adopt' # 추가한 부분
 
     - name: Build with Gradle
       run: ./gradlew build
