@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.cucumber' version '7.10.0' // Cucumber 플러그인 추가
 }
 
 repositories {
@@ -15,4 +16,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // Cucumber 리포트 생성
+    reports {
+        html.enabled = true
+        xml.enabled = false
+    }
 }
