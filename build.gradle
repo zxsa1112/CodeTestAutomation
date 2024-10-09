@@ -22,7 +22,7 @@ test {
 
     // JUnit 리포트 설정
     reports {
-        junitXml.enabled = true // JUnit XML 리포트 활성화
-        html.enabled = true // HTML 리포트도 생성하도록 설정
+        junitXml.required.set(true) // JUnit XML 리포트 활성화
+        html.required.set(true)     // HTML 리포트 활성화
     }
 }
