@@ -1,5 +1,5 @@
 plugins {
-    id 'java' // Java 플러그인 추가
+    id 'java'
 }
 
 group 'your.group.id'
@@ -11,20 +11,14 @@ repositories {
 
 dependencies {
     // JUnit 5 의존성 추가
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 사용
-    // 추가적으로 필요한 의존성 있으면 여기 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
 test {
     useJUnitPlatform() // JUnit 플랫폼 사용 설정
-
     // 테스트 리포트 생성 설정
     reports {
         junitXml.enabled = true // JUnit XML 리포트 생성
         html.enabled = true // HTML 리포트 생성
-    }
-
-    testLogging {
-        events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
     }
 }
