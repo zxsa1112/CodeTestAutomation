@@ -29,11 +29,18 @@ jobs:
       - name: Run tests
         run: ./gradlew test # Cucumber 테스트 대신 일반 JUnit 테스트 실행
 
-      - name: Upload test reports
+      - name: Upload JUnit reports
         uses: actions/upload-artifact@v3
         with:
-          name: test-reports
-          path: build/test-results/test/ # JUnit 테스트 결과 경로로 변경
+          name: junit-reports
+          path: build/test-results/test/ # JUnit 테스트 결과 경로
+
+      - name: Upload Cucumber reports (if applicable)
+        if: success() && (steps.run-tests.outputs.cucumber == 'true')
+        uses: actions/upload-artifact@v3
+        with:
+          name: cucumber-reports
+          path: build/reports/cucumber/ # Cucumber 리포트 경로
 
   codeql:
     name: Analyze
