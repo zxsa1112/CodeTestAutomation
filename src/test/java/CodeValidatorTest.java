@@ -15,9 +15,10 @@ public class CodeValidatorTest {
         String url = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/trading/inquire-psbl-order";
         String data = "{ \"CANO\": \"123456\", \"ACNT_PRDT_CD\": \"01\", \"ACNT_PWD\": \"password\", \"PDNO\": \"123\", \"ORD_UNPR\": \"1000\", \"ORD_DVSN\": \"01\", \"CMA_EVLU_AMT_ICLD_YN\": \"Y\", \"OVRS_ICLD_YN\": \"N\" }";
         String tr_id = "TTTC8908R";
-        
+
         assertDoesNotThrow(() -> {
-            httpPostBodyConnection(url, data, tr_id);
+            String response = httpPostBodyConnection(url, data, tr_id);
+            assertNotNull(response); // 응답이 null이 아님을 확인
         });
     }
 
@@ -26,7 +27,7 @@ public class CodeValidatorTest {
         String url = "https://invalid.url.com"; // 잘못된 URL
         String data = "{ \"CANO\": \"123456\", \"ACNT_PRDT_CD\": \"01\", \"ACNT_PWD\": \"password\", \"PDNO\": \"123\", \"ORD_UNPR\": \"1000\", \"ORD_DVSN\": \"01\", \"CMA_EVLU_AMT_ICLD_YN\": \"Y\", \"OVRS_ICLD_YN\": \"N\" }";
         String tr_id = "TTTC8908R";
-        
+
         assertThrows(IOException.class, () -> {
             httpPostBodyConnection(url, data, tr_id);
         });
@@ -37,14 +38,14 @@ public class CodeValidatorTest {
         String url = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/trading/inquire-psbl-order";
         String data = ""; // 빈 데이터
         String tr_id = "TTTC8908R";
-        
+
         assertThrows(IOException.class, () -> {
             httpPostBodyConnection(url, data, tr_id);
         });
     }
 
     // 테스트할 httpPostBodyConnection 메서드
-    public void httpPostBodyConnection(String UrlData, String ParamData, String TrId) throws IOException {
+    public String httpPostBodyConnection(String UrlData, String ParamData, String TrId) throws IOException {
         String totalUrl = UrlData.trim();
         URL url = new URL(totalUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -60,12 +61,16 @@ public class CodeValidatorTest {
         conn.connect();
         int responseCode = conn.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("Error: " + responseCode);
+            throw new IOException("Error: " + responseCode + " " + conn.getResponseMessage());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        String responseData = br.readLine();
-        br.close();
-        System.out.println("Response: " + responseData);
+        StringBuilder responseData = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                responseData.append(line);
+            }
+        }
+        return responseData.toString(); // 응답 데이터를 반환
     }
 }
