@@ -22,25 +22,24 @@ jobs:
       
       - name: Make Gradlew executable
         run: chmod +x gradlew
-      
+     
       - name: Build with Gradle
         run: ./gradlew build
       
       - name: Run tests
-        run: ./gradlew test # Cucumber 테스트 대신 일반 JUnit 테스트 실행
-
-      - name: Upload JUnit reports
+        run: ./gradlew test
+      
+      - name: Upload test reports
         uses: actions/upload-artifact@v3
         with:
           name: junit-reports
-          path: build/test-results/test/ # JUnit 테스트 결과 경로
+          path: build/test-results/test/  # JUnit 테스트 결과 경로
 
-      - name: Upload Cucumber reports (if applicable)
-        if: success() && (steps.run-tests.outputs.cucumber == 'true')
+      - name: Upload HTML reports
         uses: actions/upload-artifact@v3
         with:
-          name: cucumber-reports
-          path: build/reports/cucumber/ # Cucumber 리포트 경로
+          name: html-reports
+          path: build/reports/tests/test/ # HTML 리포트 경로 (이 경로는 빌드 설정에 따라 다를 수 있습니다)
 
   codeql:
     name: Analyze
