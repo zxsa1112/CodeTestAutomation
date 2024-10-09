@@ -17,20 +17,12 @@ dependencies {
 test {
     useJUnitPlatform() // JUnit 플랫폼 사용 설정
 
-    // JUnit 리포트 생성 설정
+    testLogging {
+        events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
+    }
+
     reports {
         junitXml.enabled = true // JUnit XML 리포트 생성
         html.enabled = true // HTML 리포트 생성
     }
-
-    // 테스트 로그 이벤트 설정
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
-// Gradle 8.x와 호환되도록 리포트 설정을 직접 지정
-tasks.withType(Test) {
-    reports.junitXml.destination = file("${buildDir}/test-results/junit")
-    reports.html.destination = file("${buildDir}/reports/tests")
 }
