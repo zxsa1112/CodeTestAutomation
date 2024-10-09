@@ -1,9 +1,15 @@
 plugins {
     id 'java'
+    id 'checkstyle' // Checkstyle 플러그인 추가
 }
 
 group 'your.group.id'
 version '1.0-SNAPSHOT'
+
+checkstyle {
+    toolVersion = '10.3' // Checkstyle 버전
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml") // 설정 파일 경로
+}
 
 repositories {
     mavenCentral()
