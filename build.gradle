@@ -1,11 +1,11 @@
 plugins {
     id 'java'
-    id 'io.cucumber' version '7.11.0' // Cucumber Gradle 플러그인 추가
+    id 'io.cucumber' version '7.11.0' apply false // 적용을 지연시킴
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://plugins.gradle.org/m2/' } // Gradle 플러그인 리포지토리 추가
+    maven { url 'https://plugins.gradle.org/m2/' }
 }
 
 dependencies {
