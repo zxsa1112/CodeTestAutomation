@@ -20,11 +20,9 @@ test {
         events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
     }
 
-    // JUnit 리포트 설정 (enabled 속성을 제거)
+    // JUnit 리포트 설정
     reports {
-        junitXml {
-            // enabled 속성을 사용하지 않습니다
-            // 이 설정은 기본값으로 활성화되어 있습니다.
-        }
+        junitXml.enabled = true // JUnit XML 리포트 활성화
+        html.enabled = true // HTML 리포트도 생성하도록 설정
     }
 }
