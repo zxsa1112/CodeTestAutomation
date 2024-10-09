@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.cucumber' version '7.11.0' // 최신 버전으로 변경
+    id 'io.cucumber' version '7.11.0' // Cucumber Gradle 플러그인 추가
 }
 
 repositories {
@@ -9,17 +9,28 @@ repositories {
 }
 
 dependencies {
+    // JUnit 5 (Jupiter) 의존성 추가
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    testImplementation 'io.cucumber:cucumber-java:7.11.0' // 최신 버전으로 변경
-    testImplementation 'io.cucumber:cucumber-junit:7.11.0' // 최신 버전으로 변경
+    // Cucumber Java 및 JUnit 의존성 추가
+    testImplementation 'io.cucumber:cucumber-java:7.11.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.11.0'
 }
+
+// Cucumber 플러그인 적용
+apply plugin: 'io.cucumber'
 
 // JUnit Platform 사용 설정
 test {
     useJUnitPlatform()
-    // Cucumber 리포트 생성
+    // Cucumber 리포트 생성 설정
     reports {
-        html.enabled = true
-        xml.enabled = true  // XML 리포트도 생성
+        html.enabled = true   // HTML 리포트 생성
+        xml.enabled = true     // XML 리포트 생성
     }
+}
+
+// 테스트 실행 시 Gradle 실행 환경 설정
+tasks.withType(Test) {
+    // Cucumber 리포트 파일 경로 설정
+    systemProperty 'cucumber.options', '--plugin pretty --plugin html:build/reports/cucumber'
 }
