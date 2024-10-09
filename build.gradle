@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.cucumber' version '7.10.0' // Cucumber 플러그인 추가
+    id 'io.cucumber' version '7.10.0'
 }
 
 repositories {
@@ -14,11 +14,12 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:7.10.0'
 }
 
+// JUnit Platform 사용 설정
 test {
     useJUnitPlatform()
     // Cucumber 리포트 생성
     reports {
         html.enabled = true
-        xml.enabled = false
+        xml.enabled = true  // XML 리포트도 생성
     }
 }
