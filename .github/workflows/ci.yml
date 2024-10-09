@@ -40,6 +40,15 @@ jobs:
           name: html-reports
           path: build/reports/tests/test/ # HTML 리포트 경로
 
+      - name: Run Checkstyle
+        run: ./gradlew checkstyle  # Checkstyle 실행
+
+      - name: Upload Checkstyle reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: checkstyle-reports
+          path: build/reports/checkstyle/  # Checkstyle 결과 경로
+
   codeql:
     name: Analyze
     runs-on: ubuntu-latest
