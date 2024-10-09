@@ -1,43 +1,39 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 
 public class GWTTest {
+
     @Test
-    public void testExample() {
+    public void testPlaceOrder() {
         // Given
-        int input = 5;
-        int expected = 10;
+        StockOrder order = new StockOrder();
+        order.setAccountValid(true); // 계좌가 유효하다고 가정
 
         // When
-        int result = someFunction(input);
+        order.placeOrder(10, 100.0); // 10주를 100.0에 주문
 
         // Then
-        assertEquals(expected, result);
-    }
-
-    // 테스트할 메소드
-    private int someFunction(int input) {
-        return input * 2; // 예시 함수
+        assertTrue(order.isOrderConfirmed()); // 주문이 확인되었는지 검증
     }
 }
 
-public class StockOrderSteps {
+// 주식 주문을 나타내는 클래스
+class StockOrder {
+    private boolean accountValid;
+    private boolean orderConfirmed;
 
-    @Given("I have a valid account")
-    public void i_have_a_valid_account() {
-        // 계좌 유효성 검사 로직
+    public void setAccountValid(boolean valid) {
+        this.accountValid = valid;
     }
 
-    @When("I place an order for {int} shares of stock at {double}")
-    public void i_place_an_order_for_shares_of_stock(int quantity, double price) {
-        // 주식 주문 로직
+    public void placeOrder(int quantity, double price) {
+        if (accountValid) {
+            // 주문 로직 (간단히 주문 확인 상태만 변경)
+            orderConfirmed = true; // 실제 로직 구현
+        }
     }
 
-    @Then("the order should be confirmed")
-    public void the_order_should_be_confirmed() {
-        // 주문 확인 로직
+    public boolean isOrderConfirmed() {
+        return orderConfirmed;
     }
 }
