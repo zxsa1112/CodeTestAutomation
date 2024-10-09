@@ -20,9 +20,8 @@ test {
         events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
     }
 
-    // JUnit 리포트 설정
     reports {
         junitXml.required.set(true) // JUnit XML 리포트 활성화
-        html.required.set(true)     // HTML 리포트 활성화
+        html.required.set(true) // HTML 리포트 활성화
     }
 }
