@@ -16,7 +16,12 @@ dependencies {
 
 test {
     useJUnitPlatform() // JUnit 플랫폼 사용 설정
-    // 테스트 리포트 생성 설정
+
+    // JUnit 리포트 생성 설정
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
     reports {
         junitXml.enabled = true // JUnit XML 리포트 생성
         html.enabled = true // HTML 리포트 생성
