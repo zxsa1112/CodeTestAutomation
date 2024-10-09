@@ -23,7 +23,8 @@ test {
         html.enabled = true // HTML 리포트 생성
     }
 
+    // 테스트 로그 이벤트 설정
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
+        events "passed", "skipped", "failed"
     }
 }
