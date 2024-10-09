@@ -1,17 +1,17 @@
 plugins {
     id 'java'
-    id 'io.cucumber' version '7.10.0'
+    id 'io.cucumber' version '7.11.0' // 최신 버전으로 변경
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'https://plugins.gradle.org/m2/' } // Gradle 플러그인 리포지토리 추가
 }
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    testImplementation 'io.cucumber:cucumber-java:7.10.0'
-    testImplementation 'io.cucumber:cucumber-junit:7.10.0'
+    testImplementation 'io.cucumber:cucumber-java:7.11.0' // 최신 버전으로 변경
+    testImplementation 'io.cucumber:cucumber-junit:7.11.0' // 최신 버전으로 변경
 }
 
 // JUnit Platform 사용 설정
