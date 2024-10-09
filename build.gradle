@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    // JUnit 5 의존성 추가
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
@@ -21,8 +20,11 @@ test {
         events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
     }
 
+    // JUnit 리포트 설정 (enabled 속성을 제거)
     reports {
-        junitXml.enabled = true // JUnit XML 리포트 생성
-        html.enabled = true // HTML 리포트 생성
+        junitXml {
+            // enabled 속성을 사용하지 않습니다
+            // 이 설정은 기본값으로 활성화되어 있습니다.
+        }
     }
 }
