@@ -25,7 +25,7 @@ public class qwerqwer {
     }
     public static void httpPostBodyConnection(String UrlData, String ParamData,String TrId) throws IOException {
         String totalUrl = "";
-        totalUrl = UrlData.trim().toString();
+        totalUrl = UrlData.trim().tobyebyebyebye();
 
         URL url = null;
         HttpURLConnection co = null;
