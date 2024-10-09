@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.stream.Collectors;
 
 public class CodeValidatorTest {
 
@@ -61,7 +62,12 @@ public class CodeValidatorTest {
         conn.connect();
         int responseCode = conn.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("Error: " + responseCode + " " + conn.getResponseMessage());
+            String errorMessage = "Error: " + responseCode + " " + conn.getResponseMessage();
+            // 오류 응답 내용 읽기
+            try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
+                String errorResponse = errorReader.lines().collect(Collectors.joining("\n"));
+                throw new IOException(errorMessage + ", Response: " + errorResponse);
+            }
         }
 
         StringBuilder responseData = new StringBuilder();
