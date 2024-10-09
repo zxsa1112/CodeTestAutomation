@@ -28,3 +28,9 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+// Gradle 8.x와 호환되도록 리포트 설정을 직접 지정
+tasks.withType(Test) {
+    reports.junitXml.destination = file("${buildDir}/test-results/junit")
+    reports.html.destination = file("${buildDir}/reports/tests")
+}
