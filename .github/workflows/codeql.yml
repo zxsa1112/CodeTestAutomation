@@ -85,3 +85,9 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+    - name: Upload SARIF file
+      uses: actions/upload-artifact@v3
+      with:
+        name: sarif-results
+        path: ./path/to/sarif-file.sarif # 실제 SARIF 파일 경로로 수정
