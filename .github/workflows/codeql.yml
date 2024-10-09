@@ -41,6 +41,18 @@ jobs:
     - name: Test
       run: ./gradlew test   # Gradle 테스트 실행
 
+    - name: Upload test reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: junit-reports
+        path: build/test-results/test/  # JUnit 테스트 결과 경로
+
+    - name: Upload HTML reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: html-reports
+        path: build/reports/tests/test/ # HTML 리포트 경로
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
