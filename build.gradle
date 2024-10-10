@@ -1,9 +1,9 @@
 plugins {
     id 'java'
-    id 'application' // Application 플러그인 추가
+    id 'application'
 }
 
-group 'com.kohyunwoo.kisorder' // 그룹 ID를 적절히 변경
+group 'com.kohyunwoo.kisorder'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -11,22 +11,22 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.json:json:20210307' // JSON 라이브러리 추가
+    implementation 'org.json:json:20210307'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 
-mainClassName = 'KISOrder' // 메인 클래스 지정
+mainClassName = 'KISOrder'
 
 test {
-    useJUnitPlatform() // JUnit 플랫폼 사용 설정
+    useJUnitPlatform()
 
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
+        events "passed", "skipped", "failed"
     }
 
     reports {
-        junitXml.enabled = true // JUnit XML 리포트 활성화
-        html.enabled = true      // HTML 리포트 생성 활성화
+        junitXml.enabled = true
+        html.enabled = true
     }
 }
