@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: html-reports
-          path: build/reports/tests/test-report.html
+          path: build/reports/tests/test/html/*.html  # HTML 리포트 경로 수정
 
   codeql:
     name: Analyze
