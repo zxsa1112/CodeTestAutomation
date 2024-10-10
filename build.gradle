@@ -20,13 +20,11 @@ mainClassName = 'KISOrder'
 
 test {
     useJUnitPlatform()
-
     testLogging {
         events "passed", "skipped", "failed"
     }
-
     reports {
-        junitXml.enabled = true // XML 리포트 활성화
-        html.enabled = true // HTML 리포트 활성화
+        html.required = true
+        junitXml.required = true
     }
 }
