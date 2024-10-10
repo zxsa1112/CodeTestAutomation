@@ -26,7 +26,7 @@ test {
     }
 
     reports {
-        junitXml.required.set(true) // JUnit XML 리포트 활성화
-        html.required.set(true) // HTML 리포트 활성화
+        html.enabled = true      // HTML 리포트 생성 활성화
+        html.destination = file("${buildDir}/reports") // HTML 리포트 저장 경로
     }
 }
