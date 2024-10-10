@@ -32,13 +32,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: junit-reports
-          path: build/reports/tests/test-results/test/
+          path: build/reports/tests/test-results/test/  # JUnit 리포트 경로 수정
 
       - name: Upload HTML reports
         uses: actions/upload-artifact@v3
         with:
           name: html-reports
-          path: build/reports/tests/test/html/*.html  # HTML 리포트 경로 수정
+          path: build/reports/tests/html/*.html  # HTML 리포트 경로 수정
 
   codeql:
     name: Analyze
