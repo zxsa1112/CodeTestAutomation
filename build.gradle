@@ -26,8 +26,14 @@ test {
     }
 
     reports {
-        junitXml.enabled = true // JUnit XML 리포트 활성화
-        html.enabled = true      // HTML 리포트 생성 활성화
-        html.destination = file("${buildDir}/reports/tests") // HTML 리포트 저장 경로
+        junitXml {
+            // xml 리포트가 활성화되는지 확인
+            enabled = true // 이 부분을 제거
+        }
+        html {
+            // html 리포트가 활성화되는지 확인
+            enabled = true // 이 부분을 제거
+            destination = file("${buildDir}/reports/tests")
+        }
     }
 }
