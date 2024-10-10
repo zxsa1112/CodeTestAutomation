@@ -9,37 +9,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
-
       - name: Clear Gradle cache
         run: rm -rf ~/.gradle/caches/
-
       - name: Make Gradlew executable
         run: chmod +x gradlew
-
       - name: Build with Gradle
         run: ./gradlew build
-
       - name: Run tests
         run: ./gradlew test
-
       - name: Upload JUnit test reports
         uses: actions/upload-artifact@v3
         with:
           name: junit-reports
-          path: build/reports/tests/test-results/test/  # JUnit 리포트 경로 수정
-
+          path: build/reports/tests/test-results/test/
       - name: Upload HTML reports
         uses: actions/upload-artifact@v3
         with:
           name: html-reports
-          path: build/reports/tests/html/*.html  # HTML 리포트 경로 수정
-
+          path: build/reports/tests/html/*.html
   codeql:
     name: Analyze
     runs-on: ubuntu-latest
@@ -47,18 +39,19 @@ jobs:
       actions: read
       contents: read
       security-events: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: java
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        run: ./gradlew build
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
