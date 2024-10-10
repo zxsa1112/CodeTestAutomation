@@ -50,7 +50,45 @@ public class TTTC0802U {
     }
 
     public static void httpPostBodyConnection(String UrlData, String ParamData, String TrId) throws IOException {
-        // 기존 코드 유지...
-        // 이 부분은 그대로 두셔도 됩니다.
+        String totalUrl = UrlData.trim();
+    
+        URL url = new URL(totalUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("authorization", "Bearer {TOKEN}");
+        conn.setRequestProperty("appKey", "{Client_ID}");
+        conn.setRequestProperty("appSecret", "{Client_Secret}");
+        conn.setRequestProperty("personalSeckey", "{personalSeckey}");
+        conn.setRequestProperty("tr_id", TrId);
+        conn.setRequestProperty("tr_cont", " ");
+        conn.setRequestProperty("custtype", "법인(B), 개인(P)");
+        conn.setRequestProperty("seq_no", "법인(01), 개인( )");
+        conn.setRequestProperty("mac_address", "{Mac_address}");
+        conn.setRequestProperty("phone_num", "P01011112222");
+        conn.setRequestProperty("ip_addr", "{IP_addr}");
+        conn.setRequestProperty("hashkey", "{Hash값}");
+        conn.setRequestProperty("gt_uid", "{Global UID}");
+        conn.setDoOutput(true);
+    
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] request_data = ParamData.getBytes("utf-8");
+            os.write(request_data);
+        }
+    
+        // 응답 코드 출력
+        int responseCode = conn.getResponseCode();
+        System.out.println("http 응답 코드 : " + responseCode);
+    
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        String responseData;
+        while ((responseData = br.readLine()) != null) {
+            sb.append(responseData);
+        }
+        String returnData = sb.toString();
+        System.out.println("http 응답 데이터 : " + returnData);
+        
+        br.close();
     }
 }
