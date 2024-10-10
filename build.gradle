@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'your.group.id'
+group 'com.kohyunwoo.kisorder'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.json:json:20210307' // JSON 처리 라이브러리 추가
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
