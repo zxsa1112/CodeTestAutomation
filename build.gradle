@@ -17,15 +17,15 @@ dependencies {
 
 mainClassName = 'KISOrder' // 메인 클래스 지정
 
+
 test {
-    useJUnitPlatform() // JUnit 플랫폼 사용 설정
-
+    useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 로그 이벤트 설정
+        events "passed", "skipped", "failed"
     }
-
     reports {
-        junitXml.required.set(true) // JUnit XML 리포트 활성화
-        html.required.set(true) // HTML 리포트 활성화
+        // 두 버전을 통합한 설정
+        junitXml.required = true
+        html.required = true
     }
 }
