@@ -23,11 +23,11 @@ jobs:
       matrix:
         include:
         - language: java-kotlin
-          build-mode: manual # 'autobuild'를 'manual'로 변경
+          build-mode: manual
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # 변경: v3로 통일
+      uses: actions/checkout@v3
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
@@ -42,16 +42,16 @@ jobs:
       run: ./gradlew test   # Gradle 테스트 실행
 
     - name: Upload test reports
-      uses: actions/upload-artifact@v3  # 변경: v3로 통일
+      uses: actions/upload-artifact@v3
       with:
         name: test-reports
-        path: build/reports/tests/test/*.xml  # JUnit 테스트 결과 경로
+        path: build/reports/tests/test/*.xml  # JUnit test 결과 경로
 
     - name: Upload HTML reports
-      uses: actions/upload-artifact@v3  # 변경: v3로 통일
+      uses: actions/upload-artifact@v3
       with:
         name: html-reports
-        path: build/reports/tests/test/ # HTML 리포트 경로
+        path: build/reports/tests/test/ # HTML report 경로
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
@@ -60,8 +60,7 @@ jobs:
         output: results
 
     - name: Upload SARIF file
-      uses: actions/upload-artifact@v3  # 변경: v3로 통일
+      uses: actions/upload-artifact@v3
       with:
         name: sarif-results
         path: results/*.sarif
-        retention-days: 5
