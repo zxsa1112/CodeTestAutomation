@@ -26,12 +26,7 @@ test {
     }
 
     reports {
-        junitXml {
-            enabled = true  // XML 리포트 활성화
-        }
-        html {
-            enabled = true  // HTML 리포트 활성화
-            destination = file("${buildDir}/reports/tests")  // HTML 리포트 경로
-        }
+        junitXml.enabled = true // XML 리포트 활성화
+        html.enabled = true // HTML 리포트 활성화
     }
 }
