@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 public class Stock123 {
 
@@ -24,6 +25,16 @@ public class Stock123 {
         System.out.println("주문 가격: " + price);
     }
 
+    // JSON 형식으로 주문 정보를 반환하는 메소드
+    public String toJson() {
+        JSONObject json = new JSONObject();
+        json.put("CANO", accountNumber);
+        json.put("ACNT_PRDT_CD", productCode);
+        json.put("ORD_QTY", quantity);
+        json.put("ORD_UNPR", price);
+        return json.toString();
+    }
+
     // 주문 목록을 생성하는 메소드
     public static List<Stock123> createSampleOrders() {
         List<Stock123> orders = new ArrayList<>();
@@ -40,6 +51,7 @@ public class Stock123 {
         // 주문 상세 출력
         for (Stock123 order : sampleOrders) {
             order.printOrderDetails();
+            System.out.println("주문 정보 (JSON): " + order.toJson());
             System.out.println("-----");
         }
     }
