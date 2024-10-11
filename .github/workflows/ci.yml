@@ -22,16 +22,6 @@ jobs:
         run: ./gradlew build
       - name: Run tests
         run: ./gradlew test
-      - name: Upload JUnit test reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: junit-reports
-          path: build/reports/tests/test-results/test/
-      - name: Upload HTML reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: html-reports
-          path: build/reports/tests/html/*.html
   codeql:
     name: Analyze
     runs-on: ubuntu-latest
