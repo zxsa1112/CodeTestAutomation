@@ -12,8 +12,8 @@ public class GWTTest {
         String actualOrderRequestBody = kisOrder.prepareOrderRequestBody(); // prepareOrderRequestBody 메소드를 호출합니다.
         
         // Expected: 예상되는 주문 요청 본문을 정의합니다.
-        String expectedOrderRequestBody = "{\"CANO\": \"{CANO}\", \"ACNT_PRDT_CD\": \"{ACNT_PRDT_CD}\", \"PDNO\": \"{PDNO}\", " +
-                "\"ORD_DVSN\": \"{ORD_DVSN}\", \"ORD_QTY\": \"{ORD_QTY}\", \"ORD_UNPR\": \"{ORD_UNPR}\"}";
+        String expectedOrderRequestBody = "{\"CANO\": \"50118406\", \"ACNT_PRDT_CD\": \"03\", \"PDNO\": \"101S06\", " +
+                "\"ORD_DVSN\": \"00\", \"ORD_QTY\": \"1\", \"ORD_UNPR\": \"370\"}";
 
         // Then: 실제 주문 요청 본문이 예상과 일치하는지 확인합니다.
         assertEquals(expectedOrderRequestBody, actualOrderRequestBody, "주문 요청 본문이 일치하지 않습니다.");
