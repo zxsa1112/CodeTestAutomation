@@ -11,12 +11,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.json:json:20210307' // JSON 라이브러리 추가
+    implementation 'org.json:json:20240303' // JSON 라이브러리 추가 (20240303 버전으로 변경)
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
 }
 
-mainClassName = 'KISOrder' // 메인 클래스 지정
-
+mainClassName = 'ACCESS_TOKEN' // 메인 클래스 지정
 
 test {
     useJUnitPlatform()
