@@ -74,45 +74,52 @@ public class GWTTests {
         });
     }
 
-    private Collection<DynamicTest> createGWTTestsForStockTrading() { // 메소드 위치 수정
+    private Collection<DynamicTest> createGWTTestsForStockTrading() {
         Collection<DynamicTest> tests = new ArrayList<>();
-        
+    
         tests.add(DynamicTest.dynamicTest("Given a StockTrading instance, When buyStock is called, Then it should succeed", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
-
+            double initialBalance = stockTrading.getAccountBalance("123456");
+    
             // When
             boolean result = stockTrading.buyStock("123456", "AAPL", 10);
-
+    
             // Then
             Assertions.assertTrue(result, "Buy stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < 100000.0, "Cash should be reduced after buying");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "Cash should be reduced after buying");
         }));
-
+    
         tests.add(DynamicTest.dynamicTest("Given a StockTrading instance with stocks, When sellStock is called, Then it should succeed", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
             stockTrading.buyStock("123456", "GOOGL", 5); // Buy stock first
-
+            double initialBalance = stockTrading.getAccountBalance("123456");
+    
             // When
             boolean result = stockTrading.sellStock("123456", "GOOGL", 2);
-
+    
             // Then
             Assertions.assertTrue(result, "Sell stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > 100000.0, "Cash should be increased after selling");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "Cash should be increased after selling");
+            
+            // Optionally, you can also check if the stock count decreased correctly
+            int remainingStocks = stockTrading.getStockCount("123456", "GOOGL");
+            Assertions.assertEquals(3, remainingStocks, "Remaining stocks should be 3 after selling 2");
         }));
-
+    
         tests.add(DynamicTest.dynamicTest("Given a StockTrading instance, When getAccountBalance is called, Then it should return the correct balance", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
-
+    
             // When
             double balance = stockTrading.getAccountBalance("123456");
-
+    
             // Then
             Assertions.assertEquals(100000.0, balance, "Initial balance should be $100,000");
         }));
-
+    
         return tests;
     }
+    
 }
