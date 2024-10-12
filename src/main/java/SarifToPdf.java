@@ -98,11 +98,11 @@ public class SarifToPdf {
         PDPage page = new PDPage();
         document.addPage(page);
 
-        // 나눔스퀘어 폰트 로드
-        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/NANUMSQUARE.TTF"));
+        // 파일 객체로 맑은 고딕 폰트 로드
+        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/MALGUN.TTF"));
 
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(font, 12); // 나눔스퀘어 폰트 사용
+            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
             contentStream.beginText();
             contentStream.newLineAtOffset(50, 700);
 
@@ -111,7 +111,7 @@ public class SarifToPdf {
                 contentStream.newLineAtOffset(0, -15);
             }
 
-            contentStream.endText();
+            contentStream.endText(); // 텍스트 블록 종료
         }
 
         document.save(pdfFilePath);
