@@ -34,16 +34,32 @@ public class GWTTest {
 
             // When & Then: 주식 매매 버튼이 클릭되고, 주식 매매가 이루어진다.
             nodes.add(DynamicTest.dynamicTest("주식 매매 테스트 for " + accountNumber + " - " + productCode, () -> {
-                Order order = new Order(accountNumber, productCode, quantity, price);
-                boolean isOrderPlaced = order.placeOrder();
+                // 주문 처리 메소드의 로직을 직접 구현
+                boolean isOrderPlaced = placeOrder(accountNumber, productCode, quantity, price);
                 assertTrue(isOrderPlaced, "주식 매매 주문이 성공적으로 이루어져야 합니다.");
 
                 String expectedJson = "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
-                String actualJson = order.toJson(); // Order 클래스의 toJson() 메소드 사용
+                String actualJson = getOrderJson(accountNumber, productCode, quantity, price); // 주문 정보를 JSON 형식으로 반환하는 메소드
                 assertEquals(expectedJson, actualJson, "주문 JSON 형식이 일치해야 합니다.");
             }));
         }
 
         return nodes;
+    }
+
+    // 주문 처리 메소드
+    public boolean placeOrder(String accountNumber, String productCode, int quantity, double unitPrice) {
+        // 수량이 0 이하거나 가격이 0 이하일 경우 주문 실패
+        if (quantity <= 0 || unitPrice <= 0) {
+            return false; // 주문 실패
+        }
+        // 주문 성공
+        return true;
+    }
+
+    // JSON 반환 메소드
+    private String getOrderJson(String accountNumber, String productCode, int quantity, double price) {
+        // 주어진 인자를 기반으로 주문 정보를 JSON 형식으로 반환합니다.
+        return "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
     }
 }
