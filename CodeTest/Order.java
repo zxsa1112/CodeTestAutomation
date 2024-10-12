@@ -1,58 +1,53 @@
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONObject;
 
 public class Order {
 
-    private String orderId;
-    private String product;
-    private int quantity;
-    private double unitPrice;
+    private String accountNumber; // 계좌 번호
+    private String productCode;    // 상품 코드
+    private int quantity;          // 주문 수량
+    private double unitPrice;      // 단가
 
     // 생성자
-    public Order(String orderId, String product, int quantity, double unitPrice) {
-        this.orderId = orderId;
-        this.product = product;
+    public Order(String accountNumber, String productCode, int quantity, double unitPrice) {
+        this.accountNumber = accountNumber;
+        this.productCode = productCode;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    // 주문 정보를 출력하는 메소드
-    public void printOrderDetails() {
-        System.out.println("주문 ID: " + orderId);
-        System.out.println("상품: " + product);
-        System.out.println("수량: " + quantity);
-        System.out.println("단가: " + unitPrice);
-    }
-
-    // JSON 형식으로 주문 정보를 반환하는 메소드
+    // 주문 정보를 JSON 형식으로 반환하는 메소드
     public String toJson() {
         JSONObject json = new JSONObject();
-        json.put("OrderID", orderId);
-        json.put("Product", product);
-        json.put("Quantity", quantity);
-        json.put("UnitPrice", unitPrice);
+        json.put("CANO", accountNumber);
+        json.put("ACNT_PRDT_CD", productCode);
+        json.put("ORD_QTY", quantity);
+        json.put("ORD_UNPR", unitPrice);
         return json.toString();
     }
 
-    // 주문 목록을 생성하는 메소드
-    public static List<Order> createSampleOrders() {
-        List<Order> orders = new ArrayList<>();
-        orders.add(new Order("ORD001", "Laptop", 1, 1500.0));
-        orders.add(new Order("ORD002", "Mouse", 5, 25.0));
-        orders.add(new Order("ORD003", "Keyboard", 3, 45.0));
-        return orders;
+    // 주문 처리 메소드
+    public boolean placeOrder() {
+        // 여기에 실제 주문 처리 로직을 추가
+        // 예를 들어, 데이터베이스에 주문 저장 또는 외부 API 호출
+        return true; // 주문이 성공적으로 처리되면 true 반환
     }
 
     public static void main(String[] args) {
-        // 샘플 주문 생성
-        List<Order> sampleOrders = createSampleOrders();
+        // 예시로 주식 매매를 처리
+        String accountNumber = "12345";
+        String productCode = "STOCK_A";
+        int quantity = 10;
+        double unitPrice = 100.0;
 
-        // 주문 상세 출력
-        for (Order order : sampleOrders) {
-            order.printOrderDetails();
-            System.out.println("주문 정보 (JSON): " + order.toJson());
-            System.out.println("-----");
+        Order order = new Order(accountNumber, productCode, quantity, unitPrice);
+        
+        // 주문 처리
+        boolean isOrderPlaced = order.placeOrder();
+        if (isOrderPlaced) {
+            String orderJson = order.toJson();
+            System.out.println("주문 정보 JSON: " + orderJson);
+        } else {
+            System.out.println("주문 실패");
         }
     }
 }

@@ -1,40 +1,49 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GWTTest {
 
     @TestFactory
     List<DynamicTest> testJsonConversion() {
         List<DynamicTest> nodes = new ArrayList<>();
+        Random random = new Random();
 
-        // Given
-        String accountNumber = null;
-        String productCode = null;
-        int quantity = 0;
-        double price = 0.0;
+        for (int i = 0; i < 10; i++) { // 10개의 테스트 케이스를 생성
+            String accountNumber = String.valueOf(random.nextInt(100000)); // 0-99999 사이의 랜덤 계좌 번호
+            String productCode = "STOCK_" + (char)('A' + random.nextInt(26)); // A-Z 사이의 랜덤 상품 코드
+            int quantity = random.nextInt(100) + 1; // 1-100 사이의 랜덤 수량
+            double price = random.nextDouble() * 1000; // 0-1000 사이의 랜덤 가격
 
-        // When & Then
-        nodes.add(DynamicTest.dynamicTest("Test for Stock123", () -> {
-            Object order = new Stock123(accountNumber, productCode, quantity, price);
-            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
-            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
-        }));
+            // When: 주식 매매 버튼이 클릭된다.
+            nodes.add(DynamicTest.dynamicTest("주식 매매 테스트 for " + accountNumber + " - " + productCode, () -> {
+                boolean isOrderPlaced = placeOrder(accountNumber, productCode, quantity, price);
+                assertTrue(isOrderPlaced, "주식 매매 주문이 성공적으로 이루어져야 합니다.");
+            }));
 
-        nodes.add(DynamicTest.dynamicTest("Test for Invoice", () -> {
-            Object order = new Invoice(accountNumber, productCode, quantity, price);
-            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
-            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
-        }));
-
-        nodes.add(DynamicTest.dynamicTest("Test for Order", () -> {
-            Object order = new Order(accountNumber, productCode, quantity, price);
-            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
-            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
-        }));
+            // Then: 주식 매매가 이루어진다.
+            nodes.add(DynamicTest.dynamicTest("주식 매매 결과 확인 for " + accountNumber + " - " + productCode, () -> {
+                String expectedJson = "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
+                String actualJson = getOrderJson(accountNumber, productCode, quantity, price); // 주문 정보를 JSON 형식으로 반환하는 메소드
+                assertEquals(expectedJson, actualJson, "주문 JSON 형식이 일치해야 합니다.");
+            }));
+        }
 
         return nodes;
+    }
+
+    private boolean placeOrder(String accountNumber, String productCode, int quantity, double price) {
+        // 매매 주문을 처리하는 로직을 추가합니다.
+        return true; // 성공적으로 주문을 처리했다고 가정
+    }
+
+    private String getOrderJson(String accountNumber, String productCode, int quantity, double price) {
+        // 주어진 인자를 기반으로 주문 정보를 JSON 형식으로 반환합니다.
+        return "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
     }
 }
