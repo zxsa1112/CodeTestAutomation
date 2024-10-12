@@ -110,7 +110,7 @@ public class GWTTests {
             double balance = stockTrading.getAccountBalance("123456");
 
             // Then
-            Assertions.assertEquals(10000.0, balance, "Initial balance should be $10,000");
+            Assertions.assertEquals(100000.0, balance, "Initial balance should be $100,000");
         }));
 
         return tests;
