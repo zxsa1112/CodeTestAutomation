@@ -68,11 +68,12 @@ public class StockTrading {
     }
 
     public boolean testSellStock() {
-        double initialBalance = cash;
-        buyStock("123456", "GOOGL", 5);
-        boolean result = sellStock("123456", "GOOGL", 2);
-        return result && cash > initialBalance;
-    }
+        double initialBalance = cash; // 매도 전에 잔고 저장
+        buyStock("123456", "GOOGL", 5); // GOOGL 주식 5주 매수
+        boolean result = sellStock("123456", "GOOGL", 2); // GOOGL 주식 2주 매도
+        double expectedBalance = initialBalance - (stockPrices.get("GOOGL") * 5) + (stockPrices.get("GOOGL") * 2);
+        return result && cash == expectedBalance; // 잔고가 예상 잔고와 같은지 확인
+    }    
 
     public double testGetAccountBalance() {
         return getAccountBalance("123456");
