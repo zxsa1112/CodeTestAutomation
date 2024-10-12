@@ -5,20 +5,25 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GWTTest {
 
     @TestFactory
     List<DynamicTest> testJsonConversion() {
         List<DynamicTest> nodes = new ArrayList<>();
-        Random random = new Random();
 
-        for (int i = 0; i < 10; i++) { // 10개의 테스트 케이스를 생성
-            String accountNumber = String.valueOf(random.nextInt(100000)); // 0-99999 사이의 랜덤 계좌 번호
-            String productCode = "STOCK_" + (char)('A' + random.nextInt(26)); // A-Z 사이의 랜덤 상품 코드
-            int quantity = random.nextInt(100) + 1; // 1-100 사이의 랜덤 수량
-            double price = random.nextDouble() * 1000; // 0-1000 사이의 랜덤 가격
+        // Given: 주식 매매를 위한 값이 주어진다.
+        String[][] testData = {
+            {"12345", "STOCK_A", "10", "100.0"},
+            {"54321", "STOCK_B", "20", "150.0"},
+            {"67890", "STOCK_C", "5", "200.0"}
+        };
+
+        for (String[] data : testData) {
+            String accountNumber = data[0];
+            String productCode = data[1];
+            int quantity = Integer.parseInt(data[2]);
+            double price = Double.parseDouble(data[3]);
 
             // When: 주식 매매 버튼이 클릭된다.
             nodes.add(DynamicTest.dynamicTest("주식 매매 테스트 for " + accountNumber + " - " + productCode, () -> {
@@ -29,7 +34,7 @@ public class GWTTest {
             // Then: 주식 매매가 이루어진다.
             nodes.add(DynamicTest.dynamicTest("주식 매매 결과 확인 for " + accountNumber + " - " + productCode, () -> {
                 String expectedJson = "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
-                String actualJson = getOrderJson(accountNumber, productCode, quantity, price); // 주문 정보를 JSON 형식으로 반환하는 메소드
+                String actualJson = getOrderJson(accountNumber, productCode, quantity, price);
                 assertEquals(expectedJson, actualJson, "주문 JSON 형식이 일치해야 합니다.");
             }));
         }
