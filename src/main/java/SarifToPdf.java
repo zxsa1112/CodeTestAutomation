@@ -14,7 +14,6 @@ import java.util.List;
 
 public class SarifToPdf {
     public static void main(String[] args) {
-        // 커맨드 라인 인자 확인
         if (args.length < 2) {
             System.err.println("Usage: java SarifToPdf <sarif_file_path> <output_pdf_path>");
             System.exit(1);
@@ -24,12 +23,10 @@ public class SarifToPdf {
         String pdfFilePath = args[1];
 
         try {
-            // SARIF 파일 읽기
             String sarifContent = new String(Files.readAllBytes(Paths.get(sarifFilePath)));
             JSONObject sarifJson = new JSONObject(sarifContent);
             List<String> summary = summarizeSarif(sarifJson);
 
-            // PDF 생성
             generatePdf(summary, pdfFilePath);
             System.out.println("PDF report generated successfully: " + pdfFilePath);
         } catch (IOException e) {
@@ -110,14 +107,14 @@ public class SarifToPdf {
             contentStream.newLineAtOffset(50, 700);
 
             for (String line : content) {
-                contentStream.showText(line);
-                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText(line); // 텍스트 추가
+                contentStream.newLineAtOffset(0, -15); // 줄 간격 조정
             }
 
             contentStream.endText(); // 텍스트 블록 종료
         }
 
-        document.save(pdfFilePath);
+        document.save(pdfFilePath); // PDF 파일 저장
         document.close(); // 문서 닫기
     }
 }
