@@ -52,7 +52,7 @@ public class GWTTests {
     }
 
     private DynamicTest createDynamicTest(Object testInstance, Method testMethod) {
-        return DynamicTest.dynamicTest(testMethod.getDeclaringClass().getSimpleName() + "." + testMethod.getName(), () -> {
+        return DynamicTest.dynamicTest("test " + testMethod.getDeclaringClass().getSimpleName() + "." + testMethod.getName(), () -> {
             System.out.println("Given: Setting up for " + testMethod.getName());
             System.out.println("When: Executing " + testMethod.getName());
             
@@ -70,5 +70,5 @@ public class GWTTests {
                 Assertions.assertNotNull(result, "Test " + testMethod.getName() + " returned null");
             }
         });
-    }
+    }    
 }
