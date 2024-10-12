@@ -2,16 +2,15 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 
 public class SarifToPdf {
     public static void main(String[] args) {
@@ -98,10 +97,12 @@ public class SarifToPdf {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
-        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, "C:\\Windows\\Fonts\\맑은 고딕.ttf");
+
+        // 파일 객체로 맑은 고딕 폰트 로드
+        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("C:\\Windows\\Fonts\\malgun.ttf"));
 
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(font, 12);
+            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
             contentStream.beginText();
             contentStream.newLineAtOffset(50, 700);
 
