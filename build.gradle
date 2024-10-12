@@ -1,9 +1,9 @@
 plugins {
     id 'java'
-    id 'application' // Application 플러그인 추가
+    id 'application'
 }
 
-group 'com.kohyunwoo.kisorder' // 그룹 ID를 적절히 변경
+group 'com.kohyunwoo.kisorder'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -11,12 +11,25 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.json:json:20240303' // JSON 라이브러리 추가 (20240303 버전으로 변경)
+    implementation 'org.json:json:20240303'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.28'
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.28'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
 }
 
-mainClassName = 'KISOrder' // 메인 클래스 지정
+application {
+    mainClass = 'KISOrder'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'KISOrder'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 test {
     useJUnitPlatform()
@@ -24,20 +37,15 @@ test {
         events "passed", "skipped", "failed"
     }
     reports {
-        // 두 버전을 통합한 설정
         junitXml.required = true
         html.required = true
     }
 }
 
-task generatePdf {
+tasks.register('createPdfReportDir') {
     doLast {
-        exec {
-            executable 'java'
-            args '-cp', "${project.buildDir}/libs/QWER-1.0-SNAPSHOT.jar", 'SarifToPdf'
-            environment 'SARIF_FILE', file("results/*.sarif").absolutePath // SARIF 파일 경로를 설정
-        }
+        mkdir "${buildDir}/reports/pdf"
     }
 }
 
-build.finalizedBy(generatePdf) // build 작업이 완료된 후 generatePdf 작업 실행
+build.dependsOn createPdfReportDir
