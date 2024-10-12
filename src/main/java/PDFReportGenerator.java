@@ -2,9 +2,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font; // 기본 폰트 임포트
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,18 +22,10 @@ public class PDFReportGenerator {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
 
-            // 폰트 로드
-            InputStream fontStream = PDFReportGenerator.class.getResourceAsStream("/fonts/MALGUN.TTF");
-            if (fontStream == null) {
-                System.err.println("Font file not found.");
-                System.exit(1);
-            }
-            PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, fontStream);
-
             // 페이지에 내용 추가
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
-            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
+            contentStream.setFont(PDType1Font.HELVETICA, 12); // 기본 Helvetica 폰트 사용
             contentStream.newLineAtOffset(50, 700); // 텍스트 시작 위치 조정
 
             // SARIF 내용을 PDF에 추가 (필요에 따라 줄바꿈 추가)
@@ -50,7 +41,7 @@ public class PDFReportGenerator {
             document.save(pdfFilePath);
             document.close();
 
-            System.out.println("PDF 생성 완료: " + pdfFilePath);
+            System.out.println("PDF report generated successfully: " + pdfFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,11 +1,10 @@
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font; // 기본 폰트 임포트
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,14 +37,14 @@ public class SarifToPdf {
 
     private static List<String> summarizeSarif(JSONObject sarifJson) {
         List<String> summary = new ArrayList<>();
-        summary.add("CodeQL 분석 요약");
+        summary.add("CodeQL Analysis Summary");
         summary.add("------------------------");
 
         JSONArray runs = sarifJson.getJSONArray("runs");
         for (int i = 0; i < runs.length(); i++) {
             JSONObject run = runs.getJSONObject(i);
             JSONArray results = run.getJSONArray("results");
-            summary.add("발견된 총 문제 수: " + results.length());
+            summary.add("Total Issues Found: " + results.length());
             summary.add("");
 
             for (int j = 0; j < results.length(); j++) {
@@ -55,11 +54,11 @@ public class SarifToPdf {
                 String location = result.getJSONArray("locations").getJSONObject(0)
                         .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
 
-                summary.add("문제 #" + (j + 1));
-                summary.add("규칙: " + translateRule(ruleId));
-                summary.add("설명: " + translateMessage(message));
-                summary.add("문제가 발생한 위치: " + location);
-                summary.add("권장 조치: " + suggestAction(ruleId));
+                summary.add("Issue #" + (j + 1));
+                summary.add("Rule: " + translateRule(ruleId));
+                summary.add("Description: " + translateMessage(message));
+                summary.add("Location: " + location);
+                summary.add("Recommended Action: " + suggestAction(ruleId));
                 summary.add("");
             }
         }
@@ -70,26 +69,26 @@ public class SarifToPdf {
     private static String translateRule(String ruleId) {
         switch (ruleId) {
             case "java/sql-injection":
-                return "SQL 인젝션 취약점";
+                return "SQL Injection Vulnerability";
             case "java/xss":
-                return "크로스 사이트 스크립팅 (XSS) 취약점";
+                return "Cross-Site Scripting (XSS) Vulnerability";
             default:
-                return "알 수 없는 규칙: " + ruleId;
+                return "Unknown Rule: " + ruleId;
         }
     }
 
     private static String translateMessage(String message) {
-        return "이 코드는 보안 취약점이 있을 수 있습니다. " + message;
+        return "This code may have security vulnerabilities: " + message;
     }
 
     private static String suggestAction(String ruleId) {
         switch (ruleId) {
             case "java/sql-injection":
-                return "데이터베이스 쿼리에 사용자 입력을 직접 사용하지 말고, 준비된 구문(Prepared Statement)을 사용하세요.";
+                return "Do not use user input directly in database queries; use prepared statements instead.";
             case "java/xss":
-                return "사용자 입력을 화면에 출력할 때는 반드시 특수 문자를 이스케이프 처리하세요.";
+                return "Always escape special characters when outputting user input to the screen.";
             default:
-                return "코드를 검토하고 보안 전문가와 상담하세요.";
+                return "Review the code and consult with a security expert.";
         }
     }
 
@@ -98,16 +97,8 @@ public class SarifToPdf {
         PDPage page = new PDPage();
         document.addPage(page);
 
-        // 파일 객체로 맑은 고딕 폰트 로드
-        File fontFile = new File("resources/fonts/MALGUN.TTF");
-        if (!fontFile.exists()) {
-            System.err.println("Font file not found: " + fontFile.getAbsolutePath());
-            System.exit(1);
-        }
-        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, fontFile);
-
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
+            contentStream.setFont(PDType1Font.HELVETICA, 12); // 기본 Helvetica 폰트 사용
             contentStream.beginText();
             contentStream.newLineAtOffset(50, 700);
 

@@ -23,19 +23,26 @@ application {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'SarifToPdf' // SarifToPdf 클래스를 메인 클래스로 설정
+        attributes 'Main-Class': 'SarifToPdf'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Include the fonts folder in the JAR file
+    from('src/resources/fonts') {
+        include '*.TTF'
+    }
 }
 
-// Add this block to include the resources directory
 sourceSets {
     main {
+        java {
+            srcDir 'src/main/java'
+        }
         resources {
-            srcDir 'resources' // resources 폴더를 포함
+            srcDir 'src/resources'
         }
     }
 }
