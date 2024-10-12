@@ -99,7 +99,7 @@ public class SarifToPdf {
         document.addPage(page);
 
         // 파일 객체로 맑은 고딕 폰트 로드
-        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/malgun.ttf"));
+        PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/MALGUN.TTF"));
 
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
             contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
