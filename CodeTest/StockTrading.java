@@ -62,13 +62,16 @@ public class StockTrading {
 
     // 테스트를 위한 메서드들
     public boolean testBuyStock() {
-        return buyStock("123456", "AAPL", 10);
+        double initialBalance = cash;
+        boolean result = buyStock("123456", "AAPL", 10);
+        return result && cash < initialBalance;
     }
 
     public boolean testSellStock() {
-        // 먼저 주식을 구매한 후 판매
+        double initialBalance = cash;
         buyStock("123456", "GOOGL", 5);
-        return sellStock("123456", "GOOGL", 2);
+        boolean result = sellStock("123456", "GOOGL", 2);
+        return result && cash > initialBalance;
     }
 
     public double testGetAccountBalance() {
