@@ -5,20 +5,32 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GWTTest {
 
     @TestFactory
     List<DynamicTest> testJsonConversion() {
         List<DynamicTest> nodes = new ArrayList<>();
-        Random random = new Random();
 
-        for (int i = 0; i < 10; i++) { // 10개의 테스트 케이스를 생성
-            String accountNumber = String.valueOf(random.nextInt(100000)); // 0-99999 사이의 랜덤 계좌 번호
-            String productCode = "STOCK_" + (char)('A' + random.nextInt(26)); // A-Z 사이의 랜덤 상품 코드
-            int quantity = random.nextInt(100) + 1; // 1-100 사이의 랜덤 수량
-            double price = Math.round(random.nextDouble() * 1000 * 100.0) / 100.0; // 0-1000 사이의 랜덤 가격 (소수점 2자리)
+        // 고정된 테스트 케이스
+        String[][] testCases = {
+            {"12345", "STOCK_A", "10", "100.0"},
+            {"67890", "STOCK_B", "5", "250.75"},
+            {"54321", "STOCK_C", "20", "300.50"},
+            {"98765", "STOCK_D", "15", "150.00"},
+            {"13579", "STOCK_E", "30", "80.25"},
+            {"24680", "STOCK_F", "7", "60.90"},
+            {"10293", "STOCK_G", "12", "45.00"},
+            {"39481", "STOCK_H", "3", "99.99"},
+            {"59384", "STOCK_I", "1", "1500.00"},
+            {"74826", "STOCK_J", "25", "200.00"}
+        };
+
+        for (String[] testCase : testCases) {
+            String accountNumber = testCase[0];
+            String productCode = testCase[1];
+            int quantity = Integer.parseInt(testCase[2]);
+            double price = Double.parseDouble(testCase[3]);
 
             // When & Then: 주식 매매 버튼이 클릭되고, 주식 매매가 이루어진다.
             nodes.add(DynamicTest.dynamicTest("주식 매매 테스트 for " + accountNumber + " - " + productCode, () -> {
