@@ -18,7 +18,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'SarifToPdf' // SarifToPdf 클래스를 메인 클래스로 설정
+    mainClass = 'SarifToPdf'
 }
 
 jar {
@@ -29,6 +29,15 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Add this block to include the resources directory
+sourceSets {
+    main {
+        resources {
+            srcDir 'resources' // resources 폴더를 포함
+        }
+    }
 }
 
 test {
