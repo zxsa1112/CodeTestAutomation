@@ -18,12 +18,12 @@ dependencies {
 }
 
 application {
-    mainClass = 'KISOrder'
+    mainClass = 'SarifToPdf' // SarifToPdf 클래스를 메인 클래스로 설정
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'KISOrder'
+        attributes 'Main-Class': 'SarifToPdf' // SarifToPdf 클래스를 메인 클래스로 설정
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
