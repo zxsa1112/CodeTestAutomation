@@ -5,7 +5,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,14 +37,14 @@ public class SarifToPdf {
 
     private static List<String> summarizeSarif(JSONObject sarifJson) {
         List<String> summary = new ArrayList<>();
-        summary.add("CodeQL Analysis Summary");
+        summary.add("CodeQL 분석 요약");
         summary.add("------------------------");
 
         JSONArray runs = sarifJson.getJSONArray("runs");
         for (int i = 0; i < runs.length(); i++) {
             JSONObject run = runs.getJSONObject(i);
             JSONArray results = run.getJSONArray("results");
-            summary.add("Total issues found: " + results.length());
+            summary.add("발견된 총 문제 수: " + results.length());
             summary.add("");
 
             for (int j = 0; j < results.length(); j++) {
@@ -55,15 +54,42 @@ public class SarifToPdf {
                 String location = result.getJSONArray("locations").getJSONObject(0)
                         .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
 
-                summary.add("Issue #" + (j + 1));
-                summary.add("Rule: " + ruleId);
-                summary.add("Message: " + message);
-                summary.add("Location: " + location);
+                summary.add("문제 #" + (j + 1));
+                summary.add("규칙: " + translateRule(ruleId));
+                summary.add("설명: " + translateMessage(message));
+                summary.add("문제가 발생한 위치: " + location);
+                summary.add("권장 조치: " + suggestAction(ruleId));
                 summary.add("");
             }
         }
 
         return summary;
+    }
+
+    private static String translateRule(String ruleId) {
+        switch (ruleId) {
+            case "java/sql-injection":
+                return "SQL 인젝션 취약점";
+            case "java/xss":
+                return "크로스 사이트 스크립팅 (XSS) 취약점";
+            default:
+                return "알 수 없는 규칙: " + ruleId;
+        }
+    }
+
+    private static String translateMessage(String message) {
+        return "이 코드는 보안 취약점이 있을 수 있습니다. " + message;
+    }
+
+    private static String suggestAction(String ruleId) {
+        switch (ruleId) {
+            case "java/sql-injection":
+                return "데이터베이스 쿼리에 사용자 입력을 직접 사용하지 말고, 준비된 구문(Prepared Statement)을 사용하세요.";
+            case "java/xss":
+                return "사용자 입력을 화면에 출력할 때는 반드시 특수 문자를 이스케이프 처리하세요.";
+            default:
+                return "코드를 검토하고 보안 전문가와 상담하세요.";
+        }
     }
 
     private static void generatePdf(List<String> content, String pdfFilePath) throws IOException {
