@@ -2,7 +2,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +14,7 @@ import java.util.List;
 
 public class SarifToPdf {
     public static void main(String[] args) {
+        // 커맨드 라인 인자 확인
         if (args.length < 2) {
             System.err.println("Usage: java SarifToPdf <sarif_file_path> <output_pdf_path>");
             System.exit(1);
@@ -24,10 +24,12 @@ public class SarifToPdf {
         String pdfFilePath = args[1];
 
         try {
+            // SARIF 파일 읽기
             String sarifContent = new String(Files.readAllBytes(Paths.get(sarifFilePath)));
             JSONObject sarifJson = new JSONObject(sarifContent);
             List<String> summary = summarizeSarif(sarifJson);
 
+            // PDF 생성
             generatePdf(summary, pdfFilePath);
             System.out.println("PDF report generated successfully: " + pdfFilePath);
         } catch (IOException e) {
@@ -103,8 +105,8 @@ public class SarifToPdf {
         PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/MALGUN.TTF"));
 
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
             contentStream.beginText();
+            contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
             contentStream.newLineAtOffset(50, 700);
 
             for (String line : content) {
@@ -112,10 +114,10 @@ public class SarifToPdf {
                 contentStream.newLineAtOffset(0, -15);
             }
 
-            contentStream.endText();
+            contentStream.endText(); // 텍스트 블록 종료
         }
 
         document.save(pdfFilePath);
-        document.close();
+        document.close(); // 문서 닫기
     }
 }
