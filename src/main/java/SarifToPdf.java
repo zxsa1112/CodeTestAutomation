@@ -102,19 +102,19 @@ public class SarifToPdf {
         PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/MALGUN.TTF"));
 
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.beginText();
             contentStream.setFont(font, 12); // 맑은 고딕 폰트 사용
+            contentStream.beginText();
             contentStream.newLineAtOffset(50, 700);
 
             for (String line : content) {
-                contentStream.showText(line); // 텍스트 추가
-                contentStream.newLineAtOffset(0, -15); // 줄 간격 조정
+                contentStream.showText(line);
+                contentStream.newLineAtOffset(0, -15);
             }
 
             contentStream.endText(); // 텍스트 블록 종료
         }
 
-        document.save(pdfFilePath); // PDF 파일 저장
-        document.close(); // 문서 닫기
+        document.save(pdfFilePath);
+        document.close();
     }
 }
