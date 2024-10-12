@@ -2,15 +2,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StockTrading {
-    private Map<String, Double> stockPrices;
-    private Map<String, Integer> portfolio;
-    private double cash;
+    private Map<String, Double> stockPrices; // 주식 가격 저장
+    private Map<String, Integer> portfolio; // 보유 주식 수량 저장
+    private double cash; // 현금 잔액
 
     public StockTrading() {
         stockPrices = new HashMap<>();
         portfolio = new HashMap<>();
         cash = 100000.0; // 초기 현금 설정
-        
+
         // 샘플 주식 가격 설정
         stockPrices.put("AAPL", 150.0);
         stockPrices.put("GOOGL", 2500.0);
@@ -44,6 +44,9 @@ public class StockTrading {
         double totalEarning = stockPrices.get(stockCode) * quantity;
         cash += totalEarning;
         portfolio.put(stockCode, portfolio.get(stockCode) - quantity);
+        if (portfolio.get(stockCode) == 0) {
+            portfolio.remove(stockCode); // 잔여 수량이 0일 경우 삭제
+        }
         System.out.println(stockCode + " " + quantity + "주 매도 완료");
         return true;
     }
@@ -58,6 +61,11 @@ public class StockTrading {
             System.out.println(entry.getKey() + ": " + entry.getValue() + "주");
         }
         System.out.println("현금 잔액: $" + cash);
+    }
+
+    // 주식 수량 조회 메서드 추가
+    public int getStockCount(String accountNumber, String stockCode) {
+        return portfolio.getOrDefault(stockCode, 0);
     }
 
     // 테스트를 위한 메서드들
