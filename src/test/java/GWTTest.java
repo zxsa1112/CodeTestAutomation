@@ -20,14 +20,11 @@ public class GWTTest {
             int quantity = random.nextInt(100) + 1; // 1-100 사이의 랜덤 수량
             double price = Math.round(random.nextDouble() * 1000 * 100.0) / 100.0; // 0-1000 사이의 랜덤 가격 (소수점 2자리)
 
-            // When: 주식 매매 버튼이 클릭된다.
+            // When & Then: 주식 매매 버튼이 클릭되고, 주식 매매가 이루어진다.
             nodes.add(DynamicTest.dynamicTest("주식 매매 테스트 for " + accountNumber + " - " + productCode, () -> {
                 boolean isOrderPlaced = placeOrder(accountNumber, productCode, quantity, price);
                 assertTrue(isOrderPlaced, "주식 매매 주문이 성공적으로 이루어져야 합니다.");
-            }));
 
-            // Then: 주식 매매가 이루어진다.
-            nodes.add(DynamicTest.dynamicTest("주식 매매 결과 확인 for " + accountNumber + " - " + productCode, () -> {
                 String expectedJson = "{\"CANO\":\"" + accountNumber + "\",\"ACNT_PRDT_CD\":\"" + productCode + "\",\"ORD_QTY\":" + quantity + ",\"ORD_UNPR\":" + price + "}";
                 String actualJson = getOrderJson(accountNumber, productCode, quantity, price); // 주문 정보를 JSON 형식으로 반환하는 메소드
                 assertEquals(expectedJson, actualJson, "주문 JSON 형식이 일치해야 합니다.");
