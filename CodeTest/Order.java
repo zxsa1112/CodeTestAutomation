@@ -25,29 +25,20 @@ public class Order {
         return json.toString();
     }
 
-    // 주문 처리 메소드
-    public boolean placeOrder() {
-        // 여기에 실제 주문 처리 로직을 추가
-        // 예를 들어, 데이터베이스에 주문 저장 또는 외부 API 호출
-        return true; // 주문이 성공적으로 처리되면 true 반환
+    // 주문 처리 메소드 (실제 로직을 구현하지 않고 항상 true 반환)
+    public void placeOrder() {
+        // 주문 정보를 콘솔에 출력
+        System.out.println("주문 처리 중...");
+        System.out.println("계좌 번호: " + accountNumber);
+        System.out.println("상품 코드: " + productCode);
+        System.out.println("주문 수량: " + quantity);
+        System.out.println("단가: " + unitPrice);
+        // 주문 성공 여부를 판단하는 로직은 GWTTest에서 처리하므로 여기서는 생략
     }
 
-    public static void main(String[] args) {
-        // 예시로 주식 매매를 처리
-        String accountNumber = "12345";
-        String productCode = "STOCK_A";
-        int quantity = 10;
-        double unitPrice = 100.0;
-
-        Order order = new Order(accountNumber, productCode, quantity, unitPrice);
-        
-        // 주문 처리
-        boolean isOrderPlaced = order.placeOrder();
-        if (isOrderPlaced) {
-            String orderJson = order.toJson();
-            System.out.println("주문 정보 JSON: " + orderJson);
-        } else {
-            System.out.println("주문 실패");
-        }
-    }
+    /*public static void main(String[] args) {
+        // 이 부분은 테스트 용도로 사용하지 않도록 주석 처리할 수 있습니다.
+        // Order order = new Order("12345", "STOCK_A", 10, 100.0);
+        // order.placeOrder();
+    } */
 }
