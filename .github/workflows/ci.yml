@@ -26,17 +26,6 @@ jobs:
         
       - name: Run tests
         run: ./gradlew test
-
-      - name: Generate PDF report
-        run: java -cp build/libs/QWER-1.0-SNAPSHOT.jar PDFReportGenerator  # PDF 생성 명령어
-        env:
-          SARIF_FILE: results/*.sarif  # SARIF 파일 경로 설정
-
-      - name: Upload PDF report
-        uses: actions/upload-artifact@v3
-        with:
-          name: report.pdf  # 업로드할 아티팩트 이름
-          path: build/reports/pdf/report.pdf  # 생성된 PDF 파일 경로
           
   codeql:
     name: Analyze
