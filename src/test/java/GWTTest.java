@@ -1,36 +1,40 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GWTTest {
 
-    @Test
-    public void testPrepareOrderRequestBody() {
-        // Given: 주문 정보가 담긴 Map 객체를 생성합니다.
-        Map<String, String> orderData = new HashMap<>();
-        orderData.put("CANO", "{CANO}");
-        orderData.put("ACNT_PRDT_CD", "{ACNT_PRDT_CD}");
-        orderData.put("PDNO", "{PDNO}");
-        orderData.put("ORD_DVSN", "{ORD_DVSN}");
-        orderData.put("ORD_QTY", "{ORD_QTY}");
-        orderData.put("ORD_UNPR", "{ORD_UNPR}");
+    @TestFactory
+    List<DynamicTest> testJsonConversion() {
+        List<DynamicTest> nodes = new ArrayList<>();
 
-        // 주문 요청 본문을 준비하는 메소드
-        String actualOrderRequestBody = prepareOrderRequestBody(orderData);
+        // Given
+        String accountNumber = null;
+        String productCode = null;
+        int quantity = 0;
+        double price = 0.0;
 
-        // Then: 실제 주문 요청 본문이 예상과 일치하는지 확인합니다.
-        String expectedOrderRequestBody = "{\"CANO\": \"{CANO}\", \"ACNT_PRDT_CD\": \"{ACNT_PRDT_CD}\", " +
-                "\"PDNO\": \"{PDNO}\", \"ORD_DVSN\": \"{ORD_DVSN}\", \"ORD_QTY\": \"{ORD_QTY}\", \"ORD_UNPR\": \"{ORD_UNPR}\"}";
+        // When & Then
+        nodes.add(DynamicTest.dynamicTest("Test for Stock123", () -> {
+            Object order = new Stock123(accountNumber, productCode, quantity, price);
+            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
+            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
+        }));
 
-        assertEquals(actualOrderRequestBody, expectedOrderRequestBody, "주문 요청 본문이 일치하지 않습니다.");
-    }
+        nodes.add(DynamicTest.dynamicTest("Test for Invoice", () -> {
+            Object order = new Invoice(accountNumber, productCode, quantity, price);
+            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
+            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
+        }));
 
-    // 주문 요청 본문을 생성하는 메소드
-    private String prepareOrderRequestBody(Map<String, String> orderData) {
-        return String.format("{\"CANO\": \"%s\", \"ACNT_PRDT_CD\": \"%s\", \"PDNO\": \"%s\", " +
-                             "\"ORD_DVSN\": \"%s\", \"ORD_QTY\": \"%s\", \"ORD_UNPR\": \"%s\"}",
-                             orderData.get("CANO"), orderData.get("ACNT_PRDT_CD"), orderData.get("PDNO"),
-                             orderData.get("ORD_DVSN"), orderData.get("ORD_QTY"), orderData.get("ORD_UNPR"));
+        nodes.add(DynamicTest.dynamicTest("Test for Order", () -> {
+            Object order = new Order(accountNumber, productCode, quantity, price);
+            String expectedJson = "{\"CANO\":\"null\",\"ACNT_PRDT_CD\":\"null\",\"ORD_QTY\":0,\"ORD_UNPR\":0.0}";
+            assertEquals(expectedJson, order.toJson(), "JSON 출력이 일치하지 않습니다.");
+        }));
+
+        return nodes;
     }
 }
