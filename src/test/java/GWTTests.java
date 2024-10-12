@@ -86,7 +86,7 @@ public class GWTTests {
 
             // Then
             Assertions.assertTrue(result, "Buy stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < 10000.0, "Cash should be reduced after buying");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < 100000.0, "Cash should be reduced after buying");
         }));
 
         tests.add(DynamicTest.dynamicTest("Given a StockTrading instance with stocks, When sellStock is called, Then it should succeed", () -> {
@@ -99,7 +99,7 @@ public class GWTTests {
 
             // Then
             Assertions.assertTrue(result, "Sell stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > 10000.0, "Cash should be increased after selling");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > 100000.0, "Cash should be increased after selling");
         }));
 
         tests.add(DynamicTest.dynamicTest("Given a StockTrading instance, When getAccountBalance is called, Then it should return the correct balance", () -> {
