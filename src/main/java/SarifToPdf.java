@@ -98,6 +98,14 @@ public class SarifToPdf {
         PDPage page = new PDPage();
         document.addPage(page);
 
+        File fontFile = new File("resources/fonts/MALGUN.TTF");
+if (!fontFile.exists()) {
+    System.err.println("Font file not found: " + fontFile.getAbsolutePath());
+    System.exit(1);
+}
+PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, fontFile);
+
+
         // 파일 객체로 맑은 고딕 폰트 로드
         PDTrueTypeFont font = PDTrueTypeFont.loadTTF(document, new File("resources/fonts/MALGUN.TTF"));
 
