@@ -25,20 +25,19 @@ public class Order {
         return json.toString();
     }
 
-    // 주문 처리 메소드 (실제 로직을 구현하지 않고 항상 true 반환)
-    public void placeOrder() {
+    // 주문 처리 메소드
+    public boolean placeOrder() {
+        // 수량이 0 이하이거나 가격이 0 이하일 경우 주문 실패
+        if (quantity <= 0 || unitPrice <= 0) {
+            return false; // 주문 실패
+        }
+        
         // 주문 정보를 콘솔에 출력
         System.out.println("주문 처리 중...");
         System.out.println("계좌 번호: " + accountNumber);
         System.out.println("상품 코드: " + productCode);
         System.out.println("주문 수량: " + quantity);
         System.out.println("단가: " + unitPrice);
-        // 주문 성공 여부를 판단하는 로직은 GWTTest에서 처리하므로 여기서는 생략
+        return true; // 주문 성공
     }
-
-    /*public static void main(String[] args) {
-        // 이 부분은 테스트 용도로 사용하지 않도록 주석 처리할 수 있습니다.
-        // Order order = new Order("12345", "STOCK_A", 10, 100.0);
-        // order.placeOrder();
-    } */
 }
