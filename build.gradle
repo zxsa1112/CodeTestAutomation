@@ -32,9 +32,10 @@ test {
 
 task generatePdf {
     doLast {
-        javaexec {
-            main = 'SarifToPdf' // SARIF 파일을 기반으로 PDF를 생성하는 클래스명
-            classpath = sourceSets.main.runtimeClasspath
+        exec {
+            executable 'java'
+            args '-cp', "${project.buildDir}/libs/QWER-1.0-SNAPSHOT.jar", 'SarifToPdf'
+            environment 'SARIF_FILE', file("results/*.sarif").absolutePath // SARIF 파일 경로를 설정
         }
     }
 }
