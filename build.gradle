@@ -40,7 +40,7 @@ jar {
 sourceSets {
     main {
         java {
-            srcDir 'src/main/java'
+            srcDirs = ['src/main/java', 'CodeTest'] // CodeTest 폴더 추가
         }
         resources {
             srcDir 'src/resources'
