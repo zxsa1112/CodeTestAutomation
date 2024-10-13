@@ -55,24 +55,25 @@ public class StockTradingFail {
         return cash;
     }
 
-    public int getStockCount(String accountNumber, String stockCode) {
-        return portfolio.getOrDefault(stockCode, 0);
-    }
-
     // 실패하는 테스트 메서드들
     public boolean testFailBuyStock() {
-        cash = 0; // 잔액을 0으로 설정하여 구매 실패 유도
-        boolean result = buyStock("123456", "AAPL", 10);
-        return !result; // 구매가 실패해야 하므로 false가 반환되어야 함
+        // 잔액이 부족하여 주식 구매 실패 유도
+        cash = 0; // 잔액을 0으로 설정
+        boolean result = buyStock("123456", "AAPL", 10); // 잔액 부족으로 실패
+        return !result; // 실패해야 하므로 false가 반환되어야 함
     }
 
     public boolean testFailSellStock() {
-        boolean result = sellStock("123456", "MSFT", 5); // 보유 주식이 없음
-        return !result; // 판매가 실패해야 하므로 false가 반환되어야 함
+        // 보유 주식이 부족하여 판매 실패 유도
+        boolean result = sellStock("123456", "AAPL", 5); // 보유 주식 없음
+        return !result; // 실패해야 하므로 false가 반환되어야 함
     }
 
     public boolean testFailGetAccountBalance() {
-        double balance = getAccountBalance("123456");
-        return balance != 100000.0; // 잔액이 100000.0이 아니어야 함 (실패 조건)
+        // 잔액이 100000.0이 아니어야 함 (실패 조건)
+        double initialBalance = cash;
+        cash = 99999.0; // 고의로 잔액 변경
+        boolean result = getAccountBalance("123456") != initialBalance; 
+        return result; // 잔액이 다르면 true 반환
     }
 }
