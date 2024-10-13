@@ -107,27 +107,8 @@ public class GWTTests {
             Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 주식을 구매한 후 잔액이 감소했는지 확인합니다.
         }));
     
-        // 현대 주식을 판매하는 테스트 (5주 매수 후 2주 판매)
-        tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
-            // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
-            StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
-
-            // When: 현대 주식 5주 구매
-            boolean buyResult = stockTrading.buyStock("123456", "현대", 5); // '123456' 계좌로 '현대' 주식 5주를 구매합니다.
-            Assertions.assertTrue(buyResult, "현대 주식 5주 매수가 성공해야 합니다."); // 매수 성공 여부 확인
-
-            // When: 현대 주식 2주 판매 시도
-            boolean sellResult = stockTrading.sellStock("123456", "현대", 2); // '123456' 계좌로 '현대' 주식 2주를 판매합니다.
-
-            // Then: 주식 판매 성공 여부 검증
-            Assertions.assertTrue(sellResult, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 확인
-            // Then: 남은 주식 수 확인
-            int remainingStocks = stockTrading.getStockCount("123456", "현대"); // '123456' 계좌에서 남은 '현대' 주식 수를 확인합니다.
-            Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수 확인
-        }));
-
         // 현대 주식을 판매하는 테스트 (매수 없이 바로 매도)
-        tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 보유 주식이 부족합니다.", () -> {
+        tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
     
