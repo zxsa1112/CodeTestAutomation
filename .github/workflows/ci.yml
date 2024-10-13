@@ -1,57 +1,60 @@
-name: CI
-on:
-  push:
+name: CI # 워크플로우의 이름을 "CI"로 설정
+
+on: # 워크플로우 트리거를 정의
+  push: # 푸시 이벤트가 발생했을 때
     branches:
-      - main
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
+      - main # main 브랜치에 대한 푸시 이벤트에서 워크플로우 실행
+
+jobs: # 작업 정의
+  build: # "build"라는 이름의 작업 정의
+    runs-on: ubuntu-latest # Ubuntu 최신 버전에서 작업 실행
+    steps: # 작업 내의 단계 정의
+      - name: Checkout repository # 리포지토리 체크아웃 단계
+        uses: actions/checkout@v3 # 리포지토리를 현재 작업 디렉토리에 체크아웃
+
+      - name: Set up JDK 21 # JDK 21 설정 단계
+        uses: actions/setup-java@v3 # Java 환경 설정 액션 사용
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: '21' # Java 버전 설정
+          distribution: 'temurin' # Temurin 배포판 사용
+
+      - name: Clear Gradle cache # Gradle 캐시 삭제 단계
+        run: rm -rf ~/.gradle/caches/ # 사용자 홈 디렉토리의 Gradle 캐시 삭제
+
+      - name: Make Gradlew executable # Gradlew 실행 파일로 설정
+        run: chmod +x gradlew # Gradlew에 실행 권한 부여
+
+      - name: Build with Gradle # Gradle로 빌드하는 단계
+        run: ./gradlew build # Gradle 빌드 명령 실행
+        
+      - name: Run tests # 테스트 실행 단계
+        run: ./gradlew test # Gradle 테스트 명령 실행
           
-      - name: Clear Gradle cache
-        run: rm -rf ~/.gradle/caches/
-        
-      - name: Make Gradlew executable
-        run: chmod +x gradlew
-        
-      - name: Build with Gradle
-        run: ./gradlew build
-        
-      - name: Run tests
-        run: ./gradlew test
-          
-  codeql:
-    name: Analyze
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+  codeql: # "codeql"이라는 이름의 작업 정의
+    name: Analyze # 작업 이름 설정
+    runs-on: ubuntu-latest # Ubuntu 최신 버전에서 작업 실행
+    permissions: # 작업에 필요한 권한 정의
+      actions: read # 액션 읽기 권한
+      contents: read # 콘텐츠 읽기 권한
+      security-events: write # 보안 이벤트 쓰기 권한
       
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    steps: # 작업 내의 단계 정의
+      - name: Checkout code # 코드 체크아웃 단계
+        uses: actions/checkout@v3 # 리포지토리를 현재 작업 디렉토리에 체크아웃
         
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+      - name: Initialize CodeQL # CodeQL 초기화 단계
+        uses: github/codeql-action/init@v3 # CodeQL 초기화 액션 사용
         with:
-          languages: java
-          
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
+          languages: java # 분석할 언어 설정 (Java)
+
+      - name: Set up JDK 21 # JDK 21 설정 단계
+        uses: actions/setup-java@v3 # Java 환경 설정 액션 사용
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: '21' # Java 버전 설정
+          distribution: 'temurin' # Temurin 배포판 사용
           
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build with Gradle # Gradle로 빌드하는 단계
+        run: ./gradlew build # Gradle 빌드 명령 실행
         
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+      - name: Perform CodeQL Analysis # CodeQL 분석 수행 단계
+        uses: github/codeql-action/analyze@v3 # CodeQL 분석 액션 사용
