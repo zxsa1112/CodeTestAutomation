@@ -14,14 +14,8 @@ public class GWTTests {
         // 동적 테스트를 저장할 리스트 생성
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-        // GitHub 워크스페이스 경로 가져오기 (로컬 테스트 시 현재 디렉토리 사용)
-        String workspacePath = System.getenv("GITHUB_WORKSPACE");
-        if (workspacePath == null) {
-            workspacePath = System.getProperty("user.dir");
-        }
-
-        // 파일 작업을 위한 경로 설정
-        File workspace = new File(workspacePath);
+        // 파일 작업을 위한 경로 설정 (현재 디렉토리 사용)
+        File workspace = new File(System.getProperty("user.dir"));
 
         // .java 파일을 찾고 GWTTests.java는 제외
         File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
@@ -100,7 +94,7 @@ public class GWTTests {
         Collection<DynamicTest> tests = new ArrayList<>();
 
         // 삼성 주식을 구매하는 테스트
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, buyStock이 호출되면, 성공해야 한다", () -> {
+        tests.add(DynamicTest.dynamicTest("삼성 주식을 10주 구매할 때 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
             double initialBalance = stockTrading.getAccountBalance("123456"); // 초기 잔액을 가져옵니다.
@@ -109,12 +103,12 @@ public class GWTTests {
             boolean result = stockTrading.buyStock("123456", "삼성", 10); // '123456' 계좌로 '삼성' 주식 10주를 구매합니다.
 
             // Then: 주식 구매 성공 여부 및 잔액 검증
-            Assertions.assertTrue(result, "주식을 사는 것이 성공해야 합니다."); // 주식 구매가 성공했는지 확인합니다.
+            Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 확인합니다.
             Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 주식을 구매한 후 잔액이 감소했는지 확인합니다.
         }));
 
         // 현대 주식을 판매하는 테스트
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서 주식을 보유한 상태에서, sellStock이 호출되면, 성공해야 한다", () -> {
+        tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성하고 현대 주식 5주 구매
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
             stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 '123456' 계좌로 구매합니다.
@@ -124,7 +118,7 @@ public class GWTTests {
             boolean result = stockTrading.sellStock("123456", "현대", 2); // '123456' 계좌로 '현대' 주식 2주를 판매합니다.
 
             // Then: 주식 판매 성공 여부 및 잔액 검증
-            Assertions.assertTrue(result, "주식을 파는 것이 성공해야 합니다."); // 주식 판매가 성공했는지 확인합니다.
+            Assertions.assertTrue(result, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 확인합니다.
             Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
             
             // Then: 주식 수가 올바르게 감소했는지 확인
@@ -133,7 +127,7 @@ public class GWTTests {
         }));
 
         // LG 주식의 초기 잔액을 확인하는 테스트
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
+        tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000달러여야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
 
