@@ -87,7 +87,7 @@ public class StockTrading {
 
     public boolean testSellStock() {
         double initialBalance = cash; // 초기 잔액 저장
-        buyStock("123456", "현대", 5000); // 현대 주식 5주 구매
+        buyStock("123456", "현대", 5); // 현대 주식 5주 구매
         boolean result = sellStock("123456", "현대", 2); // 현대 주식 2주 판매
         return result && cash > initialBalance; // 매도 성공 및 잔액 변화 확인
     }
