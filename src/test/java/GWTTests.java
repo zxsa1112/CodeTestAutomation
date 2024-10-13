@@ -114,7 +114,7 @@ public class GWTTests {
         tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서 주식을 보유한 상태에서, sellStock이 호출되면, 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성하고 현대 주식 5주 구매
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
-            stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 '123456' 계좌로 구매합니다.
+            stockTrading.buyStock("123456", "현대", 5000); // '현대' 주식 5주를 '123456' 계좌로 구매합니다.
             double initialBalance = stockTrading.getAccountBalance("123456"); // 초기 잔액을 가져옵니다.
 
             // When: 현대 주식 2주 판매 시도
