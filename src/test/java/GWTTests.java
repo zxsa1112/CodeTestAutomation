@@ -108,23 +108,24 @@ public class GWTTests {
         }));
 
         // 현대 주식을 판매하는 테스트
-        tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
-            // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성하고 현대 주식 5주 구매
-            StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
-            stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 '123456' 계좌로 구매합니다.
-            double initialBalance = stockTrading.getAccountBalance("123456"); // 초기 잔액을 가져옵니다.
+tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
+    // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
+    StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
+    stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 '123456' 계좌로 구매합니다. (이 부분을 유지)
 
-            // When: 현대 주식 2주 판매 시도
-            boolean result = stockTrading.sellStock("123456", "현대", 2); // '123456' 계좌로 '현대' 주식 2주를 판매합니다.
+    // When: 현대 주식 2주 판매 시도
+    boolean result = stockTrading.sellStock("123456", "현대", 2); // '123456' 계좌로 '현대' 주식 2주를 판매합니다.
 
-            // Then: 주식 판매 성공 여부 및 잔액 검증
-            Assertions.assertTrue(result, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 확인합니다.
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
-            
-            // Then: 주식 수가 올바르게 감소했는지 확인
-            int remainingStocks = stockTrading.getStockCount("123456", "현대"); // '123456' 계좌에서 남은 '현대' 주식 수를 확인합니다.
-            Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 2주를 판매한 후 남은 주식 수가 3인지 확인합니다.
-        }));
+    // Then: 주식 판매 성공 여부 및 잔액 검증
+    Assertions.assertTrue(result, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 확인합니다.
+    double newBalance = stockTrading.getAccountBalance("123456"); // 판매 후 잔액 가져오기
+    Assertions.assertTrue(newBalance > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
+    
+    // Then: 주식 수가 올바르게 감소했는지 확인
+    int remainingStocks = stockTrading.getStockCount("123456", "현대"); // '123456' 계좌에서 남은 '현대' 주식 수를 확인합니다.
+    Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 2주를 판매한 후 남은 주식 수가 3인지 확인합니다.
+}));
+
 
         // LG 주식의 초기 잔액을 확인하는 테스트
         tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000달러여야 한다", () -> {
