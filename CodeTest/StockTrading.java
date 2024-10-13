@@ -12,9 +12,9 @@ public class StockTrading {
         cash = 100000.0; // 초기 현금 설정
 
         // 샘플 주식 가격 설정
-        stockPrices.put("AAPL", 150.0);
-        stockPrices.put("GOOGL", 2500.0);
-        stockPrices.put("MSFT", 300.0);
+        stockPrices.put("삼성", 150.0);
+        stockPrices.put("현대", 2500.0);
+        stockPrices.put("LG", 300.0);
     }
 
     public boolean buyStock(String accountNumber, String stockCode, int quantity) {
@@ -71,14 +71,14 @@ public class StockTrading {
     // 테스트를 위한 메서드들
     public boolean testBuyStock() {
         double initialBalance = cash;
-        boolean result = buyStock("123456", "AAPL", 10);
+        boolean result = buyStock("123456", "삼성", 10); // 삼성 주식으로 테스트
         return result && cash < initialBalance;
     }
 
     public boolean testSellStock() {
         double initialBalance = cash;
-        buyStock("123456", "GOOGL", 5);
-        boolean result = sellStock("123456", "GOOGL", 2);
+        buyStock("123456", "현대", 5); // 현대 주식으로 테스트
+        boolean result = sellStock("123456", "현대", 2); // 현대 주식으로 판매
         return result && cash > initialBalance;
     }
 
