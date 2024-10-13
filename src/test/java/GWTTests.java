@@ -48,11 +48,20 @@ public class GWTTests {
         }));
 
         // LG 주식의 초기 잔액을 확인하는 테스트
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
-            double balance = stockTrading.getAccountBalance("123456");
-            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다.");
-            System.out.println("LG 주식 초기 잔액: " + balance);
-        }));
+tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
+    // 주식을 구매하기 전에 잔액을 조회
+    double balance = stockTrading.getAccountBalance("123456");
+    Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다.");
+
+    // 주식을 사서 잔액 확인
+    stockTrading.buyStock("123456", "삼성", 10); // 삼성 주식 구매
+    double newBalance = stockTrading.getAccountBalance("123456");
+    double expectedBalanceAfterPurchase = 100000.0 - (150.0 * 10); // 150.0은 삼성 주식 가격
+    Assertions.assertEquals(expectedBalanceAfterPurchase, newBalance, "주식을 구매한 후 잔액이 줄어야 합니다.");
+    
+    System.out.println("LG 주식 초기 잔액: " + balance);
+}));
+
 
         return tests; // 모든 테스트 목록을 반환합니다.
     }
