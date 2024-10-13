@@ -116,7 +116,7 @@ public class GWTTests {
             boolean result = stockTrading.sellStock("123456", "현대", 2); // '123456' 계좌로 '현대' 주식 2주를 판매합니다.
     
             // Then: 주식 판매 성공 여부 검증
-            Assertions.assertFalse(result, "주식 판매가 실패해야 합니다."); // 주식 판매가 실패했는지 확인
+            Assertions.assertFalse(true, "주식 판매가 실패해야 합니다."); // 주식 판매가 실패했는지 확인
             // 추가적으로 잔액과 남은 주식 수를 검증할 수 있습니다.
         }));
     
