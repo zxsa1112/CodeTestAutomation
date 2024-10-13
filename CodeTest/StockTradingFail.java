@@ -1,12 +1,12 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class StockTradingFailGWTTests {
+public class StockTradingFail {
     private Map<String, Double> stockPrices; // 주식 가격 저장
     private Map<String, Integer> portfolio; // 보유 주식 수량 저장
     private double cash; // 현금 잔액
 
-    public StockTradingFailGWTTests() {
+    public StockTradingFail() {
         stockPrices = new HashMap<>();
         portfolio = new HashMap<>();
         cash = 100000.0; // 초기 현금 설정
@@ -55,29 +55,18 @@ public class StockTradingFailGWTTests {
         return cash;
     }
 
-    public void displayPortfolio() {
-        System.out.println("현재 포트폴리오:");
-        for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue() + "주");
-        }
-        System.out.println("현금 잔액: $" + cash);
-    }
-
-    // 주식 수량 조회 메서드 추가
     public int getStockCount(String accountNumber, String stockCode) {
         return portfolio.getOrDefault(stockCode, 0);
     }
 
     // 실패하는 테스트 메서드들
     public boolean testFailBuyStock() {
-        // 잔액이 부족하여 주식 구매 실패
         cash = 0; // 잔액을 0으로 설정하여 구매 실패 유도
         boolean result = buyStock("123456", "AAPL", 10);
         return !result; // 구매가 실패해야 하므로 false가 반환되어야 함
     }
 
     public boolean testFailSellStock() {
-        // 보유 주식이 부족하여 판매 실패
         boolean result = sellStock("123456", "MSFT", 5); // 보유 주식이 없음
         return !result; // 판매가 실패해야 하므로 false가 반환되어야 함
     }
