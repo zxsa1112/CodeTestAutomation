@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.Assertions;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.lang.reflect.Method;
@@ -29,6 +30,7 @@ public class GWTTests {
         }
 
         dynamicTests.addAll(createGWTTestsForStockTrading()); // GWT 테스트 추가
+        dynamicTests.addAll(createFailingTests()); // 실패하는 테스트 추가
 
         return dynamicTests;
     }
@@ -120,6 +122,26 @@ public class GWTTests {
         }));
     
         return tests;
-    }    
-    
+    }
+
+    // 실패하는 테스트를 추가하는 메서드
+    private Collection<DynamicTest> createFailingTests() {
+        Collection<DynamicTest> tests = new ArrayList<>();
+
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, 잔액이 부족하여 buyStock이 실패해야 한다", () -> {
+            StockTrading stockTrading = new StockTrading();
+            stockTrading.buyStock("123456", "AAPL", 1); // 정상적으로 주식 구매
+            stockTrading.buyStock("123456", "GOOGL", 10); // 잔액이 부족하여 구매 실패 유도
+            boolean result = stockTrading.buyStock("123456", "GOOGL", 10);
+            Assertions.assertFalse(result, "주식 구매가 실패해야 합니다."); // 실패해야 하는 테스트
+        }));
+
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, sellStock이 실패해야 한다", () -> {
+            StockTrading stockTrading = new StockTrading();
+            boolean result = stockTrading.sellStock("123456", "MSFT", 1); // 보유 주식이 없음
+            Assertions.assertFalse(result, "주식 판매가 실패해야 합니다."); // 실패해야 하는 테스트
+        }));
+
+        return tests;
+    }
 }
