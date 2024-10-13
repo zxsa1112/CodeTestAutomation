@@ -14,11 +14,8 @@ public class GWTTests {
         // 동적 테스트를 저장할 리스트 생성
         Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-        // GitHub 워크스페이스 경로 가져오기 (로컬 테스트 시 현재 디렉토리 사용)
-        String workspacePath = System.getenv("GITHUB_WORKSPACE");
-        if (workspacePath == null) {
-            workspacePath = System.getProperty("user.dir");
-        }
+        // 로컬 테스트 시 현재 디렉토리 사용
+        String workspacePath = System.getProperty("user.dir");
 
         // 파일 작업을 위한 경로 설정
         File workspace = new File(workspacePath);
