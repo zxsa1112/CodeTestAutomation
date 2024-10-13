@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class SarifToPdf {
@@ -38,25 +39,32 @@ public class SarifToPdf {
     }
 
     private static List<String> summarizeSarif(JSONObject sarifJson) {
-        List<String> summary = new ArrayList<>();
-        summary.add("CodeQL 분석 요약");
-        summary.add("------------------------");
+    List<String> summary = new ArrayList<>();
+    summary.add("CodeQL 분석 요약");
+    summary.add("------------------------");
 
-        JSONArray runs = sarifJson.getJSONArray("runs");
-        for (int i = 0; i < runs.length(); i++) {
-            JSONObject run = runs.getJSONObject(i);
-            JSONArray results = run.getJSONArray("results");
-            summary.add("발견된 총 문제 수: " + results.length());
-            summary.add("");
+    JSONArray runs = sarifJson.getJSONArray("runs");
+    // 중복 방지를 위한 Set 사용
+    HashSet<String> uniqueProblems = new HashSet<>();
 
-            for (int j = 0; j < results.length(); j++) {
-                JSONObject result = results.getJSONObject(j);
-                String ruleId = result.getJSONObject("rule").getString("id");
-                String message = result.getJSONObject("message").getString("text");
-                String location = result.getJSONArray("locations").getJSONObject(0)
-                        .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
+    for (int i = 0; i < runs.length(); i++) {
+        JSONObject run = runs.getJSONObject(i);
+        JSONArray results = run.getJSONArray("results");
+        summary.add("발견된 총 문제 수: " + results.length());
+        summary.add("");
 
-                summary.add("문제 #" + (j + 1));
+        for (int j = 0; j < results.length(); j++) {
+            JSONObject result = results.getJSONObject(j);
+            String ruleId = result.getJSONObject("rule").getString("id");
+            String message = result.getJSONObject("message").getString("text");
+            String location = result.getJSONArray("locations").getJSONObject(0)
+                    .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
+
+            String problemDescription = ruleId + message + location; // 중복 확인을 위한 문자열 생성
+
+            // 중복 검사
+            if (uniqueProblems.add(problemDescription)) { // Set에 추가하고 성공 여부를 체크
+                summary.add("문제 #" + (uniqueProblems.size())); // 문제 번호 업데이트
                 summary.add("규칙: " + translateRule(ruleId));
                 summary.add("설명: " + translateMessage(message));
                 summary.add("위치: " + location);
@@ -64,9 +72,11 @@ public class SarifToPdf {
                 summary.add("");
             }
         }
-
-        return summary;
     }
+
+    return summary;
+}
+
 
     private static String translateRule(String ruleId) {
         switch (ruleId) {
