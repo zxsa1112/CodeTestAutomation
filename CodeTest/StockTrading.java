@@ -11,7 +11,6 @@ public class StockTrading {
     public StockTrading() {
         stockPrices = new HashMap<>(); // 주식 가격 저장을 위한 해시맵 초기화
         portfolio = new HashMap<>(); // 포트폴리오(보유 주식) 저장을 위한 해시맵 초기화
-        cash = 100000.0; // 초기 현금 잔액 설정
 
         // 샘플 주식 가격 설정
         stockPrices.put("삼성", 150.0); // 삼성 주식 가격
