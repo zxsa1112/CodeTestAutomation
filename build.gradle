@@ -32,7 +32,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     // Include the fonts folder in the JAR file
-    from('src/resources/fonts') {
+    from('src/main/resources/fonts') {
         include '*.TTF'
     }
 }
@@ -43,7 +43,7 @@ sourceSets {
             srcDirs = ['src/main/java', 'CodeTest'] // CodeTest 폴더 추가
         }
         resources {
-            srcDir 'src/resources'
+            srcDir 'src/main/resources'
         }
     }
 }

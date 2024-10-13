@@ -1,11 +1,12 @@
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font; // 기본 폰트 임포트
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 public class SarifToPdf {
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: java SarifToPdf <sarif_file_path> <output_pdf_path>");
+            System.err.println("사용법: java SarifToPdf <sarif_file_path> <output_pdf_path>");
             System.exit(1);
         }
 
@@ -27,9 +28,9 @@ public class SarifToPdf {
             List<String> summary = summarizeSarif(sarifJson);
 
             generatePdf(summary, pdfFilePath);
-            System.out.println("PDF report generated successfully: " + pdfFilePath);
+            System.out.println("PDF 보고서가 성공적으로 생성되었습니다: " + pdfFilePath);
         } catch (IOException e) {
-            System.err.println("Error occurred while processing the SARIF file or generating the PDF:");
+            System.err.println("SARIF 파일 처리 또는 PDF 생성 중 오류가 발생했습니다:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -37,14 +38,14 @@ public class SarifToPdf {
 
     private static List<String> summarizeSarif(JSONObject sarifJson) {
         List<String> summary = new ArrayList<>();
-        summary.add("CodeQL Analysis Summary");
+        summary.add("CodeQL 분석 요약");
         summary.add("------------------------");
 
         JSONArray runs = sarifJson.getJSONArray("runs");
         for (int i = 0; i < runs.length(); i++) {
             JSONObject run = runs.getJSONObject(i);
             JSONArray results = run.getJSONArray("results");
-            summary.add("Total Issues Found: " + results.length());
+            summary.add("발견된 총 문제 수: " + results.length());
             summary.add("");
 
             for (int j = 0; j < results.length(); j++) {
@@ -54,11 +55,11 @@ public class SarifToPdf {
                 String location = result.getJSONArray("locations").getJSONObject(0)
                         .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
 
-                summary.add("Issue #" + (j + 1));
-                summary.add("Rule: " + translateRule(ruleId));
-                summary.add("Description: " + translateMessage(message));
-                summary.add("Location: " + location);
-                summary.add("Recommended Action: " + suggestAction(ruleId));
+                summary.add("문제 #" + (j + 1));
+                summary.add("규칙: " + translateRule(ruleId));
+                summary.add("설명: " + translateMessage(message));
+                summary.add("위치: " + location);
+                summary.add("권장 조치: " + suggestAction(ruleId));
                 summary.add("");
             }
         }
@@ -69,26 +70,26 @@ public class SarifToPdf {
     private static String translateRule(String ruleId) {
         switch (ruleId) {
             case "java/sql-injection":
-                return "SQL Injection Vulnerability";
+                return "SQL 인젝션 취약점";
             case "java/xss":
-                return "Cross-Site Scripting (XSS) Vulnerability";
+                return "크로스 사이트 스크립팅 (XSS) 취약점";
             default:
-                return "Unknown Rule: " + ruleId;
+                return "알 수 없는 규칙: " + ruleId;
         }
     }
 
     private static String translateMessage(String message) {
-        return "This code may have security vulnerabilities: " + message;
+        return "이 코드에 보안 취약점이 있을 수 있습니다: " + message;
     }
 
     private static String suggestAction(String ruleId) {
         switch (ruleId) {
             case "java/sql-injection":
-                return "Do not use user input directly in database queries; use prepared statements instead.";
+                return "데이터베이스 쿼리에 사용자 입력을 직접 사용하지 마세요; 대신 준비된 구문을 사용하세요.";
             case "java/xss":
-                return "Always escape special characters when outputting user input to the screen.";
+                return "사용자 입력을 화면에 출력할 때 항상 특수 문자를 이스케이프 처리하세요.";
             default:
-                return "Review the code and consult with a security expert.";
+                return "코드를 검토하고 보안 전문가와 상담하세요.";
         }
     }
 
@@ -97,17 +98,25 @@ public class SarifToPdf {
         PDPage page = new PDPage();
         document.addPage(page);
 
-        try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(PDType1Font.HELVETICA, 12); // 기본 Helvetica 폰트 사용
-            contentStream.beginText();
-            contentStream.newLineAtOffset(50, 700);
-
-            for (String line : content) {
-                contentStream.showText(line);
-                contentStream.newLineAtOffset(0, -15);
+        // 프로젝트 내의 리소스 폴더에서 맑은 고딕 폰트 파일 로드
+        try (InputStream fontStream = SarifToPdf.class.getResourceAsStream("/fonts/MALGUN.TTF")) {
+            if (fontStream == null) {
+                throw new IOException("폰트 파일을 찾을 수 없습니다.");
             }
+            PDType0Font font = PDType0Font.load(document, fontStream);
 
-            contentStream.endText(); // 텍스트 블록 종료
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.setFont(font, 12);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, 700);
+
+                for (String line : content) {
+                    contentStream.showText(line);
+                    contentStream.newLineAtOffset(0, -15);
+                }
+
+                contentStream.endText();
+            }
         }
 
         document.save(pdfFilePath);
