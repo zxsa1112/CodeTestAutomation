@@ -77,7 +77,7 @@ public class GWTTests {
     private Collection<DynamicTest> createGWTTestsForStockTrading() {
         Collection<DynamicTest> tests = new ArrayList<>();
     
-        tests.add(DynamicTest.dynamicTest("Given a StockTrading instance, When buyStock is called, Then it should succeed", () -> {
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, buyStock이 호출되면, 성공해야 한다", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
             double initialBalance = stockTrading.getAccountBalance("123456");
@@ -86,29 +86,29 @@ public class GWTTests {
             boolean result = stockTrading.buyStock("123456", "AAPL", 10);
     
             // Then
-            Assertions.assertTrue(result, "Buy stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "Cash should be reduced after buying");
+            Assertions.assertTrue(result, "주식을 사는 것이 성공해야 합니다.");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다.");
         }));
     
-        tests.add(DynamicTest.dynamicTest("Given a StockTrading instance with stocks, When sellStock is called, Then it should succeed", () -> {
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서 주식을 보유한 상태에서, sellStock이 호출되면, 성공해야 한다", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
-            stockTrading.buyStock("123456", "GOOGL", 5); // Buy stock first
+            stockTrading.buyStock("123456", "GOOGL", 5); // 주식을 먼저 구매
             double initialBalance = stockTrading.getAccountBalance("123456");
     
             // When
             boolean result = stockTrading.sellStock("123456", "GOOGL", 2);
     
             // Then
-            Assertions.assertTrue(result, "Sell stock should succeed");
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "Cash should be increased after selling");
+            Assertions.assertTrue(result, "주식을 파는 것이 성공해야 합니다.");
+            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다.");
             
-            // Optionally, you can also check if the stock count decreased correctly
+            // 주식 수가 올바르게 감소했는지 확인
             int remainingStocks = stockTrading.getStockCount("123456", "GOOGL");
-            Assertions.assertEquals(3, remainingStocks, "Remaining stocks should be 3 after selling 2");
+            Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다.");
         }));
     
-        tests.add(DynamicTest.dynamicTest("Given a StockTrading instance, When getAccountBalance is called, Then it should return the correct balance", () -> {
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
             // Given
             StockTrading stockTrading = new StockTrading();
     
@@ -116,10 +116,10 @@ public class GWTTests {
             double balance = stockTrading.getAccountBalance("123456");
     
             // Then
-            Assertions.assertEquals(100000.0, balance, "Initial balance should be $100,000");
+            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다.");
         }));
     
         return tests;
-    }
+    }    
     
 }
