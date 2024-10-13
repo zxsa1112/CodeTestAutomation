@@ -9,38 +9,38 @@ import java.io.File; // 파일 작업을 위한 클래스
 public class GWTTests {
 
     // 동적 테스트를 만드는 메소드
-@TestFactory
-Collection<DynamicTest> testDynamicGWT() {
-    // 동적 테스트를 저장할 리스트 생성
-    Collection<DynamicTest> dynamicTests = new ArrayList<>();
+    @TestFactory
+    Collection<DynamicTest> testDynamicGWT() {
+        // 동적 테스트를 저장할 리스트 생성
+        Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-    // GitHub 워크스페이스 경로 가져오기 (로컬 테스트 시 현재 디렉토리 사용)
-    String workspacePath = System.getenv("GITHUB_WORKSPACE");
-    if (workspacePath == null) {
-        workspacePath = System.getProperty("user.dir");
-    }
-
-    // 파일 작업을 위한 경로 설정
-    File workspace = new File(workspacePath);
-
-    // .java 파일을 찾고 GWTTests.java는 제외
-    File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
-
-    // 찾은 Java 파일에 대해 테스트 생성
-    if (javaFiles != null) {
-        for (File file : javaFiles) {
-            String className = file.getName().replace(".java", ""); // 파일 이름에서 .java 제거
-            // 각 클래스에 대한 테스트를 만들어 리스트에 추가
-            dynamicTests.addAll(createTestsForClass(className));
+        // GitHub 워크스페이스 경로 가져오기 (로컬 테스트 시 현재 디렉토리 사용)
+        String workspacePath = System.getenv("GITHUB_WORKSPACE");
+        if (workspacePath == null) {
+            workspacePath = System.getProperty("user.dir");
         }
+
+        // 파일 작업을 위한 경로 설정
+        File workspace = new File(workspacePath);
+
+        // .java 파일을 찾고 GWTTests.java는 제외
+        File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
+
+        // 찾은 Java 파일에 대해 테스트 생성
+        if (javaFiles != null) {
+            for (File file : javaFiles) {
+                String className = file.getName().replace(".java", ""); // 파일 이름에서 .java 제거
+                // 각 클래스에 대한 테스트를 만들어 리스트에 추가
+                dynamicTests.addAll(createTestsForClass(className));
+            }
+        }
+
+        // 주식 거래 테스트 추가
+        dynamicTests.addAll(createGWTTestsForStockTrading());
+
+        // 생성된 동적 테스트 리스트 반환
+        return dynamicTests;
     }
-
-    // 주식 거래 테스트 추가
-    dynamicTests.addAll(createGWTTestsForStockTrading());
-
-    // 생성된 동적 테스트 리스트 반환
-    return dynamicTests;
-}
 
     // 주어진 클래스에 대한 테스트를 생성하는 메소드
     private Collection<DynamicTest> createTestsForClass(String className) {
@@ -75,7 +75,7 @@ Collection<DynamicTest> testDynamicGWT() {
         return DynamicTest.dynamicTest("test " + testMethod.getDeclaringClass().getSimpleName() + "." + testMethod.getName(), () -> {
             System.out.println("Given: Setting up for " + testMethod.getName());
             System.out.println("When: Executing " + testMethod.getName());
-            
+
             // 테스트 메소드 실행
             Object result = testMethod.invoke(testInstance);
             
@@ -133,18 +133,17 @@ Collection<DynamicTest> testDynamicGWT() {
         }));
 
         // LG 주식의 초기 잔액을 확인하는 테스트
-tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
-    // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
-    StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
+        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
+            // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
+            StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
 
-    // When: 잔액 조회 메소드 호출
-    double balance = stockTrading.getAccountBalance("123456"); // '123456' 계좌의 잔액을 조회합니다.
+            // When: 잔액 조회 메소드 호출
+            double balance = stockTrading.getAccountBalance("123456"); // '123456' 계좌의 잔액을 조회합니다.
 
-    // Then: 초기 잔액 검증
-    Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액이 100,000달러인지 확인합니다.
-    System.out.println("LG 주식 초기 잔액: " + balance); // 테스트 결과 출력
-}));
-
+            // Then: 초기 잔액 검증
+            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액이 100,000달러인지 확인합니다.
+            System.out.println("LG 주식 초기 잔액: " + balance); // 테스트 결과 출력
+        }));
 
         return tests; // 모든 테스트 목록을 반환합니다.
     }
