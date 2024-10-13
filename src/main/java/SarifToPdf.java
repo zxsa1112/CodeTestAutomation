@@ -39,44 +39,52 @@ public class SarifToPdf {
     }
 
     private static List<String> summarizeSarif(JSONObject sarifJson) {
-    List<String> summary = new ArrayList<>();
-    summary.add("CodeQL 분석 요약");
-    summary.add("------------------------");
-
-    JSONArray runs = sarifJson.getJSONArray("runs");
-    // 중복 방지를 위한 Set 사용
-    HashSet<String> uniqueProblems = new HashSet<>();
-
-    for (int i = 0; i < runs.length(); i++) {
-        JSONObject run = runs.getJSONObject(i);
-        JSONArray results = run.getJSONArray("results");
-        summary.add("발견된 총 문제 수: " + results.length());
-        summary.add("");
-
-        for (int j = 0; j < results.length(); j++) {
-            JSONObject result = results.getJSONObject(j);
-            String ruleId = result.getJSONObject("rule").getString("id");
-            String message = result.getJSONObject("message").getString("text");
-            String location = result.getJSONArray("locations").getJSONObject(0)
-                    .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
-
-            String problemDescription = ruleId + message + location; // 중복 확인을 위한 문자열 생성
-
-            // 중복 검사
-            if (uniqueProblems.add(problemDescription)) { // Set에 추가하고 성공 여부를 체크
-                summary.add("문제 #" + (uniqueProblems.size())); // 문제 번호 업데이트
-                summary.add("규칙: " + translateRule(ruleId));
-                summary.add("설명: " + translateMessage(message));
-                summary.add("위치: " + location);
-                summary.add("권장 조치: " + suggestAction(ruleId));
-                summary.add("");
+        List<String> summary = new ArrayList<>();
+        summary.add("CodeQL 분석 요약");
+        summary.add("------------------------");
+    
+        JSONArray runs = sarifJson.getJSONArray("runs");
+        // 중복 방지를 위한 Set 사용
+        HashSet<String> uniqueProblems = new HashSet<>();
+        int totalIssues = 0; // 총 문제 수 추적
+        int duplicateCount = 0; // 중복 문제 수 추적
+    
+        for (int i = 0; i < runs.length(); i++) {
+            JSONObject run = runs.getJSONObject(i);
+            JSONArray results = run.getJSONArray("results");
+            totalIssues += results.length(); // 발견된 문제 수 추가
+    
+            for (int j = 0; j < results.length(); j++) {
+                JSONObject result = results.getJSONObject(j);
+                String ruleId = result.getJSONObject("rule").getString("id");
+                String message = result.getJSONObject("message").getString("text");
+                String location = result.getJSONArray("locations").getJSONObject(0)
+                        .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
+    
+                String problemDescription = ruleId + message + location; // 중복 확인을 위한 문자열 생성
+    
+                // 중복 검사
+                if (uniqueProblems.add(problemDescription)) { // Set에 추가하고 성공 여부를 체크
+                    summary.add("문제 #" + (uniqueProblems.size())); // 문제 번호 업데이트
+                    summary.add("규칙: " + translateRule(ruleId));
+                    summary.add("설명: " + translateMessage(message));
+                    summary.add("위치: " + location);
+                    summary.add("권장 조치: " + suggestAction(ruleId));
+                    summary.add("");
+                } else {
+                    duplicateCount++; // 중복 문제 수 증가
+                }
             }
         }
+    
+        summary.add("발견된 총 문제 수: " + totalIssues); // 전체 문제 수 출력
+        summary.add("중복 문제 수: " + duplicateCount); // 중복 문제 수 출력
+        if (duplicateCount > 0) {
+            summary.add("(같은 문제로 인한 중복 제거로 인해 " + duplicateCount + "개의 문제가 제외되었습니다.)");
+        }
+    
+        return summary;
     }
-
-    return summary;
-}
-
 
     private static String translateRule(String ruleId) {
         switch (ruleId) {
