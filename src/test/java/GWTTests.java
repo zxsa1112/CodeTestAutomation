@@ -1,47 +1,46 @@
-import org.junit.jupiter.api.DynamicTest; // 동적 테스트를 위해 필요
-import org.junit.jupiter.api.TestFactory; // 테스트 팩토리를 사용하기 위해 필요
-import org.junit.jupiter.api.Assertions; // 단언을 위한 클래스
-import java.util.ArrayList; // 동적 테스트를 저장할 리스트
-import java.util.Collection; // 여러 객체를 저장할 수 있는 컬렉션
-import java.lang.reflect.Method; // 리플렉션을 사용하여 메소드 정보 가져오기
-import java.io.File; // 파일 작업을 위해 필요
+import org.junit.jupiter.api.DynamicTest; // 동적 테스트를 생성하기 위한 클래스
+import org.junit.jupiter.api.TestFactory; // 테스트 팩토리를 만들기 위한 클래스
+import org.junit.jupiter.api.Assertions; // 테스트 결과를 확인하는 데 필요한 클래스
+import java.util.ArrayList; // 동적 테스트를 저장할 리스트를 위한 클래스
+import java.util.Collection; // 여러 객체를 모아서 저장할 수 있는 컬렉션 클래스
+import java.lang.reflect.Method; // 리플렉션을 사용하여 메소드 정보를 가져오기 위한 클래스
+import java.io.File; // 파일 작업을 위한 클래스
 
 public class GWTTests {
 
-    // 동적 테스트를 생성하기 위한 메소드
-    @TestFactory
-    Collection<DynamicTest> testDynamicGWT() {
-        // 동적 테스트를 저장할 컬렉션
-        Collection<DynamicTest> dynamicTests = new ArrayList<>();
+    // 동적 테스트를 만드는 메소드
+@TestFactory
+Collection<DynamicTest> testDynamicGWT() {
+    // 동적 테스트를 저장할 리스트 생성
+    Collection<DynamicTest> dynamicTests = new ArrayList<>();
 
-        // GitHub 워크스페이스 경로 가져오기
-        // 로컬 테스트 시 현재 디렉토리를 사용
-        String workspacePath = System.getenv("GITHUB_WORKSPACE");
-        if (workspacePath == null) {
-            workspacePath = System.getProperty("user.dir");
-        }
-
-        // 작업할 파일 경로 설정
-        File workspace = new File(workspacePath);
-
-        // .java 확장자를 가진 모든 Java 파일을 찾음 (GWTTests.java 제외)
-        File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
-
-        // 찾은 Java 파일에 대해 테스트 생성
-        if (javaFiles != null) {
-            for (File file : javaFiles) {
-                String className = file.getName().replace(".java", ""); // 파일 이름에서 확장자 제거
-                // 해당 클래스에 대한 테스트 생성
-                dynamicTests.addAll(createTestsForClass(className));
-            }
-        }
-
-        // 주식 거래 테스트 추가
-        dynamicTests.addAll(createGWTTestsForStockTrading());
-
-        // 생성된 동적 테스트를 반환
-        return dynamicTests;
+    // GitHub 워크스페이스 경로 가져오기 (로컬 테스트 시 현재 디렉토리 사용)
+    String workspacePath = System.getenv("GITHUB_WORKSPACE");
+    if (workspacePath == null) {
+        workspacePath = System.getProperty("user.dir");
     }
+
+    // 파일 작업을 위한 경로 설정
+    File workspace = new File(workspacePath);
+
+    // .java 파일을 찾고 GWTTests.java는 제외
+    File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
+
+    // 찾은 Java 파일에 대해 테스트 생성
+    if (javaFiles != null) {
+        for (File file : javaFiles) {
+            String className = file.getName().replace(".java", ""); // 파일 이름에서 .java 제거
+            // 각 클래스에 대한 테스트를 만들어 리스트에 추가
+            dynamicTests.addAll(createTestsForClass(className));
+        }
+    }
+
+    // 주식 거래 테스트 추가
+    dynamicTests.addAll(createGWTTestsForStockTrading());
+
+    // 생성된 동적 테스트 리스트 반환
+    return dynamicTests;
+}
 
     // 주어진 클래스에 대한 테스트를 생성하는 메소드
     private Collection<DynamicTest> createTestsForClass(String className) {
@@ -134,16 +133,18 @@ public class GWTTests {
         }));
 
         // LG 주식의 초기 잔액을 확인하는 테스트
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
-            // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
-            StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
+tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, getAccountBalance가 호출되면, 올바른 잔액을 반환해야 한다", () -> {
+    // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
+    StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
 
-            // When: 잔액 조회 메소드 호출
-            double balance = stockTrading.getAccountBalance("123456"); // '123456' 계좌의 잔액을 조회합니다.
+    // When: 잔액 조회 메소드 호출
+    double balance = stockTrading.getAccountBalance("123456"); // '123456' 계좌의 잔액을 조회합니다.
 
-            // Then: 초기 잔액 검증
-            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액이 100,000달러인지 확인합니다.
-        }));
+    // Then: 초기 잔액 검증
+    Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액이 100,000달러인지 확인합니다.
+    System.out.println("LG 주식 초기 잔액: " + balance); // 테스트 결과 출력
+}));
+
 
         return tests; // 모든 테스트 목록을 반환합니다.
     }
