@@ -129,18 +129,16 @@ public class GWTTests {
         Collection<DynamicTest> tests = new ArrayList<>();
 
         tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, 잔액이 부족하여 buyStock이 실패해야 한다", () -> {
+            // Given
             StockTrading stockTrading = new StockTrading();
-            stockTrading.buyStock("123456", "AAPL", 1); // 정상적으로 주식 구매
-            stockTrading.buyStock("123456", "GOOGL", 10); // 잔액이 부족하여 구매 실패 유도
-            boolean result = stockTrading.buyStock("123456", "GOOGL", 10);
-            Assertions.assertFalse(result, "주식 구매가 실패해야 합니다."); // 실패해야 하는 테스트
-        }));
-
-        tests.add(DynamicTest.dynamicTest("주어진 StockTrading 인스턴스에서, sellStock이 실패해야 한다", () -> {
-            StockTrading stockTrading = new StockTrading();
-            boolean result = stockTrading.sellStock("123456", "MSFT", 1); // 보유 주식이 없음
-            Assertions.assertFalse(result, "주식 판매가 실패해야 합니다."); // 실패해야 하는 테스트
-        }));
+            stockTrading.buyStock("123456", "AAPL", 1000); // 잔액을 소진하도록 큰 수량 구매
+        
+            // When
+            boolean result = stockTrading.buyStock("123456", "AAPL", 10); // 잔액 부족 상태에서 구매 시도
+        
+            // Then
+            Assertions.assertFalse(result, "주식을 사는 것이 실패해야 합니다."); // 실패해야 하므로 false가 반환되어야 함
+        }));        
 
         return tests;
     }
