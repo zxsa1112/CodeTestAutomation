@@ -17,7 +17,6 @@ public class StockTrading {
         stockPrices.put("LG", 300.0); // LG 주식 가격
 
         // 초기 계좌 생성
-        accounts.put("123456", new Account(100000.0)); // 계좌 123456 생성
         cash = 100000.0; // 초기 잔액 설정
     }
 
