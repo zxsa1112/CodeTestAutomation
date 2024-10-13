@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class SarifToPdf {
         String pdfFilePath = args[1];
 
         try {
-            String sarifContent = new String(Files.readAllBytes(Paths.get(sarifFilePath)));
+            String sarifContent = new String(Files.readAllBytes(Paths.get(sarifFilePath)), StandardCharsets.UTF_8);
             JSONObject sarifJson = new JSONObject(sarifContent);
             List<String> summary = summarizeSarif(sarifJson);
 
