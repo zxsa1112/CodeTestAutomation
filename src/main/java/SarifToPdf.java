@@ -11,9 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SarifToPdf {
     public static void main(String[] args) {
@@ -45,8 +43,6 @@ public class SarifToPdf {
         summary.add("------------------------");
 
         JSONArray runs = sarifJson.getJSONArray("runs");
-        Set<String> uniqueIssues = new HashSet<>(); // 중복 제거를 위한 Set 사용
-
         for (int i = 0; i < runs.length(); i++) {
             JSONObject run = runs.getJSONObject(i);
             JSONArray results = run.getJSONArray("results");
@@ -60,21 +56,13 @@ public class SarifToPdf {
                 String location = result.getJSONArray("locations").getJSONObject(0)
                         .getJSONObject("physicalLocation").getJSONObject("artifactLocation").getString("uri");
 
-                String issue = "문제 #" + (j + 1) + "\n" +
-                               "규칙: " + translateRule(ruleId) + "\n" +
-                               "설명: " + translateMessage(message) + "\n" +
-                               "위치: " + location + "\n" +
-                               "권장 조치: " + suggestAction(ruleId) + "\n";
-
-                // 중복된 문제는 추가하지 않음
-                uniqueIssues.add(issue);
+                summary.add("문제 #" + (j + 1));
+                summary.add("규칙: " + translateRule(ruleId));
+                summary.add("설명: " + translateMessage(message));
+                summary.add("위치: " + location);
+                summary.add("권장 조치: " + suggestAction(ruleId));
+                summary.add("");
             }
-        }
-
-        // 중복 제거된 문제를 요약 리스트에 추가
-        for (String issue : uniqueIssues) {
-            summary.add(issue);
-            summary.add(""); // 각 문제 사이에 빈 줄 추가
         }
 
         return summary;
