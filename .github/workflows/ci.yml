@@ -27,10 +27,10 @@ jobs: # 작업 정의
       - name: Build with Gradle # Gradle로 빌드하는 단계
         run: ./gradlew build # Gradle 빌드 명령 실행
         
-      - name: Run tests and generate CSV # 테스트 실행 및 CSV 생성
+      - name: Run tests and convert SARIF to CSV
         run: |
           ./gradlew test
-          java -cp build/libs/* SarifToCsv # 테스트 결과를 CSV로 변환
+          ./gradlew convertSarifToCsv
 
       - name: Upload CSV report # CSV 파일 업로드
         uses: actions/upload-artifact@v3

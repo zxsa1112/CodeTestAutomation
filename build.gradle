@@ -1,82 +1,86 @@
 plugins {
-    id 'java' // Java 플러그인 적용
-    id 'application' // 애플리케이션 플러그인 적용
+    id 'java'
+    id 'application'
 }
 
-group 'com.kohyunwoo.kisorder' // 그룹 ID 설정
-version '1.0-SNAPSHOT' // 프로젝트 버전 설정
+group 'com.kohyunwoo.kisorder'
+version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral() // Maven Central 저장소 사용
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'org.json:json:20240303' // JSON 처리 라이브러리 의존성 추가
-    implementation 'org.apache.pdfbox:pdfbox:2.0.28' // PDF 생성 및 조작을 위한 PDFBox 라이브러리 의존성 추가
-    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.28' // PDFBox 도구 라이브러리 의존성 추가
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 의존성 추가 (테스트)
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2' // JUnit 5 실행 엔진 의존성 추가 (테스트)
+    implementation 'org.json:json:20240303'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.28'
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.28'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 application {
-    mainClass = 'SarifToCsv' // 애플리케이션의 진입점(main 클래스) 설정
+    mainClass = 'SarifToCsv' // SarifToCsv 클래스 설정
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'SarifToCsv' // JAR 파일 메타데이터에 메인 클래스 설정
+        attributes 'Main-Class': 'SarifToCsv'
     }
     from {
-        // 런타임 클래스패스를 포함하여 JAR 파일 생성
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 중복된 파일 포함 설정
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-    // 리소스 폴더에서 TTF 폰트 파일 포함
     from('src/main/resources/fonts') {
-        include '*.TTF' // TTF 파일만 포함
+        include '*.TTF'
     }
 }
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', 'CodeTest'] // Java 소스 디렉토리 추가 (CodeTest 폴더 포함)
+            srcDirs = ['src/main/java', 'CodeTest']
         }
         resources {
-            srcDir 'src/main/resources' // 리소스 디렉토리 설정
+            srcDir 'src/main/resources'
         }
     }
 }
 
 test {
-    useJUnitPlatform() // JUnit 플랫폼 사용 설정
+    useJUnitPlatform()
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 결과 로그 이벤트 설정
+        events "passed", "skipped", "failed"
     }
     reports {
-        junitXml.required = true // JUnit XML 리포트 생성 설정
-        html.required = true // HTML 리포트 생성 설정
+        junitXml.required = true
+        html.required = true
     }
 }
 
-tasks.register('createPdfReportDir') { // PDF 보고서 디렉토리 생성 태스크 등록
+tasks.register('createPdfReportDir') {
     doLast {
-        mkdir "${buildDir}/reports/pdf" // 빌드 디렉토리 내에 PDF 리포트 디렉토리 생성
+        mkdir "${buildDir}/reports/pdf"
     }
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8' // Java 소스 파일 인코딩 설정
+    options.encoding = 'UTF-8'
 }
 
 tasks.withType(Copy) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 파일 복사 시 중복 파일 포함 설정
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 리소스 처리 시 중복 파일 포함 설정
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-// 전체 빌드 작업이 PDF 보고서 디렉토리 생성 작업을 의존하도록 설정
-build.dependsOn createPdfReportDir
+// SARIF 파일을 CSV로 변환하는 작업 추가
+task convertSarifToCsv(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'SarifToCsv'
+    args 'results.sarif', 'results.csv' // SARIF 파일에서 CSV로 변환하는 인자 설정
+}
+
+build.dependsOn createPdfReportDir, convertSarifToCsv
