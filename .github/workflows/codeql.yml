@@ -74,7 +74,7 @@ jobs: # 작업 정의
 
     - name: Generate PDF report # PDF 보고서 생성 단계
       run: | # 여러 줄 명령 실행
-        java -cp build/libs/QWER-1.0-SNAPSHOT.jar:build/libs/* SarifToPdf results/*.sarif build/reports/pdf/report.pdf # SARIF 파일을 PDF로 변환
+        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToPdf results/*.sarif build/reports/pdf/report.pdf # SARIF 파일을 PDF로 변환
       env:
         SARIF_FILE: results/*.sarif  # SARIF 파일 경로 설정
 
