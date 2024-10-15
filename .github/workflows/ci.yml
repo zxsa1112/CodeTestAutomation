@@ -27,8 +27,16 @@ jobs: # 작업 정의
       - name: Build with Gradle # Gradle로 빌드하는 단계
         run: ./gradlew build # Gradle 빌드 명령 실행
         
-      - name: Run tests # 테스트 실행 단계
-        run: ./gradlew test # Gradle 테스트 명령 실행
+      - name: Run tests and generate CSV # 테스트 실행 및 CSV 생성
+        run: |
+          ./gradlew test
+          java -cp build/libs/* SarifToCsv # 테스트 결과를 CSV로 변환
+
+      - name: Upload CSV report # CSV 파일 업로드
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-csv
+          path: results.csv # CSV 파일 경로
           
   codeql: # "codeql"이라는 이름의 작업 정의
     name: Analyze # 작업 이름 설정
