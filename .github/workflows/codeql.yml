@@ -54,6 +54,9 @@ jobs: # 작업 정의
         name: html-reports # 아티팩트 이름
         path: build/reports/tests/test/ # HTML 보고서 경로
 
+    - name: Set SARIF file name # SARIF 파일 이름 설정 단계
+      run: echo "SARIF_FILE_NAME=sarif-json-${{ github.run_id }}.json" >> $GITHUB_ENV  # SARIF 파일 이름 설정
+
     - name: Perform CodeQL Analysis # CodeQL 분석 수행 단계
       uses: github/codeql-action/analyze@v3 # CodeQL 분석 액션 사용
       with:
