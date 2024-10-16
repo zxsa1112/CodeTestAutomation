@@ -17,6 +17,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 의존성 추가 (테스트)
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2' // JUnit 5 실행 엔진 의존성 추가 (테스트)
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.jfree:jfreechart:1.5.3'
 }
 
 application {
