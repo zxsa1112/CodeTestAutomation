@@ -21,20 +21,17 @@ public class SarifToJson {
         }
 
         try {
-            // SARIF 파일 읽기
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode sarifData = objectMapper.readTree(sarifFile);
 
-            // SARIF 데이터 파싱 및 주요 정보 추출
             JsonNode runs = sarifData.get("runs");
             if (runs != null && runs.isArray()) {
                 for (JsonNode run : runs) {
                     JsonNode results = run.get("results");
                     if (results != null && results.isArray()) {
                         for (JsonNode result : results) {
-                            // Rule ID와 Message를 추출하고 출력
-                            String ruleId = result.get("ruleId") != null ? result.get("ruleId").asText() : "N/A";
-                            String message = result.get("message") != null && result.get("message").has("text") 
+                            String ruleId = result.has("ruleId") ? result.get("ruleId").asText() : "N/A";
+                            String message = result.has("message") && result.get("message").has("text") 
                                 ? result.get("message").get("text").asText() : "N/A";
                             
                             System.out.println("Rule ID: " + ruleId);
@@ -44,7 +41,6 @@ public class SarifToJson {
                 }
             }
 
-            // 필요한 경우 데이터를 JSON으로 변환 후 출력
             String jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(sarifData);
             System.out.println(jsonString);
 
