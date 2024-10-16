@@ -83,3 +83,15 @@ jobs: # 작업 정의
       with:
         name: CodeQL-PDF-Report # 아티팩트 이름
         path: build/reports/pdf/report.pdf  # 생성된 PDF 파일 경로
+
+    - name: Parse SARIF to JSON
+      run: |
+        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToJson results/*.sarif > build/reports/json/sarif-parsed.json
+      env:
+        SARIF_FILE: results/*.sarif  # SARIF 파일 경로 설정
+
+    - name: Upload Parsed SARIF JSON
+      uses: actions/upload-artifact@v3
+      with:
+        name: sarif-json
+        path: build/reports/json/sarif-parsed.json
