@@ -20,12 +20,12 @@ dependencies {
 }
 
 application {
-    mainClass = 'SarifToCsv' // 애플리케이션의 진입점(main 클래스) 설정
+    mainClass = 'SarifToJson' // 애플리케이션의 진입점(main 클래스) 설정
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'SarifToCsv' // JAR 파일 메타데이터에 메인 클래스 설정
+        attributes 'Main-Class': 'SarifToJson' // JAR 파일 메타데이터에 메인 클래스 설정
     }
     from {
         // 런타임 클래스패스를 포함하여 JAR 파일 생성
