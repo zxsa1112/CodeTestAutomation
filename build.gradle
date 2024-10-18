@@ -53,7 +53,7 @@ sourceSets {
 test {
     useJUnitPlatform() // JUnit 플랫폼 사용 설정
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 결과 로그 이벤트 설정
+        events "성공", "스킵", "실패" // 테스트 결과 로그 이벤트 설정
     }
     reports {
         junitXml.required = true // JUnit XML 리포트 생성 설정
