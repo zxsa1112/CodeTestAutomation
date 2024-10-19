@@ -64,6 +64,15 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
         return cash; // 현재 잔액 반환
     }
 
+    // 포트폴리오 상태 출력 메서드
+    public void displayPortfolio() {
+        System.out.println("현재 포트폴리오:");
+        for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue() + "주"); // 보유 주식 출력
+        }
+        System.out.println("현금 잔액: $" + cash); // 잔액 출력
+    }
+
     // 주식 수량 조회 메서드 추가
     public int getStockCount(String stockCode) {
         return portfolio.getOrDefault(stockCode, 0); // 보유 주식 수량 반환, 없으면 0 반환
