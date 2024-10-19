@@ -16,42 +16,39 @@ public class GWTTests {
         File workspace = new File(System.getProperty("user.dir"));  // 현재 작업 디렉토리를 가져온다
         File codeTestDirectory = new File(workspace, "CodeTest");   // CodeTest 폴더 경로 생성
 
-        File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
+        File[] javaFiles = codeTestDirectory.listFiles((dir, name) -> name.endsWith(".java")); // CodeTest 폴더 내의 .java 파일 찾기
 
-        // 찾은 Java 파일에 대해 테스트 생성
-        if (javaFiles != null) {
+        if (javaFiles != null) {    // 찾은 Java 파일에 대해 테스트 생성
             for (File file : javaFiles) {
-                String className = file.getName().replace(".java", ""); // 파일 이름에서 .java 제거
-                dynamicTests.addAll(createTestsForClass(className));
+                String className = file.getName().replace(".java", ""); // 파일 이름에서 .java를 제거하여 클래스 이름을 만든다
+                dynamicTests.addAll(createTestsForClass(className));    // 해당 클래스에 대한 테스트를 추가
             }
         }
 
-        // 주식 거래 테스트 추가
-        dynamicTests.addAll(createGWTTestsForStockTrading());
+        dynamicTests.addAll(createGWTTestsForStockTrading());   // 주식 거래 관련 테스트 추가
 
-        return dynamicTests;
+        return dynamicTests;    // 생성된 동적 테스트를 반환
     }
 
-    // 주어진 클래스에 대한 테스트를 생성하는 메소드
-    private Collection<DynamicTest> createTestsForClass(String className) {
-        Collection<DynamicTest> tests = new ArrayList<>();
+    private Collection<DynamicTest> createTestsForClass(String className) { // 주어진 클래스에 대한 테스트를 생성하는 메소드
+        Collection<DynamicTest> tests = new ArrayList<>();  // 테스트를 저장할 리스트 생성
 
         try {
-            Class<?> testClass = Class.forName(className);
-            Object testInstance = testClass.getDeclaredConstructor().newInstance();
+            Class<?> testClass = Class.forName(className);  // 클래스 정보를 가져온다
+            Object testInstance = testClass.getDeclaredConstructor().newInstance(); // 클래스의 인스턴스를 생성
 
-            for (Method method : testClass.getDeclaredMethods()) {
-                if (method.getName().startsWith("test")) {
-                    tests.add(createDynamicTest(testInstance, method));
+            for (Method method : testClass.getDeclaredMethods()) {  // 클래스의 모든 메소드를 확인
+                if (method.getName().startsWith("test")) {  // 메소드 이름이 "test"로 시작하면
+                    tests.add(createDynamicTest(testInstance, method)); // 동적 테스트를 추가
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error processing class " + className + ": " + e.getMessage());
+            System.out.println("Error processing class " + className + ": " + e.getMessage());  // 에러 메시지 출력
             tests.add(DynamicTest.dynamicTest("Error in " + className, 
-                () -> Assertions.fail("Error: " + e.getMessage())));
+                () -> Assertions.fail("Error: " + e.getMessage())));    // 에러 테스트 추가
         }
 
-        return tests;
+        return tests;   // 생성된 테스트를 반환
     }
 
     // 동적 테스트를 생성하는 메소드
