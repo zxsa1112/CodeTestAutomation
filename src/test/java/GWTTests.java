@@ -1,22 +1,21 @@
-import java.io.File; // 동적 테스트를 생성하는 클래스
-import java.lang.reflect.Method; // 테스트 팩토리를 만드는 클래스
-import java.util.ArrayList; // 테스트 결과를 확인하기 위한 클래스
-import java.util.Collection; // 동적 테스트를 저장할 리스트
+import java.io.File; // 파일 작업을 위해 필요한 클래스
+import java.lang.reflect.Method; // 메소드 정보를 가져오기 위한 클래스
+import java.util.ArrayList; // 동적 테스트를 저장할 리스트 클래스
+import java.util.Collection; // 객체를 모아 저장하는 클래스
 
-import org.junit.jupiter.api.Assertions; // 여러 객체를 모아 저장하는 컬렉션 클래스
-import org.junit.jupiter.api.DynamicTest; // 리플렉션을 사용하여 메소드 정보를 가져오는 클래스
-import org.junit.jupiter.api.TestFactory; // 파일 작업을 위한 클래스
+import org.junit.jupiter.api.Assertions; // 테스트 결과를 검증하기 위한 클래스
+import org.junit.jupiter.api.DynamicTest; // 동적 테스트를 생성하는 클래스
+import org.junit.jupiter.api.TestFactory; // 테스트를 동적으로 생성하는 클래스
 
 public class GWTTests {
 
-    // 동적 테스트를 만드는 메소드
-    @TestFactory
+    @TestFactory    // 동적 테스트를 만드는 메소드
     Collection<DynamicTest> testDynamicGWT() {
-        Collection<DynamicTest> dynamicTests = new ArrayList<>();
+        Collection<DynamicTest> dynamicTests = new ArrayList<>();   // 동적 테스트를 저장할 리스트 생성
 
-        File workspace = new File(System.getProperty("user.dir"));
+        File workspace = new File(System.getProperty("user.dir"));  // 현재 작업 디렉토리를 가져온다
+        File codeTestDirectory = new File(workspace, "CodeTest");   // CodeTest 폴더 경로 생성
 
-        // .java 파일을 찾고 GWTTests.java는 제외
         File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java"));
 
         // 찾은 Java 파일에 대해 테스트 생성
