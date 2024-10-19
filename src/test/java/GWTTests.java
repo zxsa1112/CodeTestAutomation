@@ -80,7 +80,8 @@ public class GWTTests {
 
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 검증
             Assertions.assertTrue(stockTrading.getAccountBalance() < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 구매 후 잔액이 줄어들어야 함을 검증
-
+            
+            System.out.println("------------"); // 구분자 출력
             stockTrading.displayPortfolio();    // 포트폴리오 상태(잔액) 출력
         }));
 
@@ -98,6 +99,7 @@ public class GWTTests {
             int remainingStocks = stockTrading.getStockCount("현대"); // 남은 현대 주식 수 확인
             Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 검증
 
+            System.out.println("------------"); // 구분자 출력
             stockTrading.displayPortfolio();    // 포트폴리오 상태(잔액) 출력
         }));
 
