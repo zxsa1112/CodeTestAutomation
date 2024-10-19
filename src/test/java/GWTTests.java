@@ -111,14 +111,14 @@ public class GWTTests {
         }));
 
         // 초기 잔액 확인 테스트
-        tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000달러여야 한다", () -> {
+        tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000원 이여야 한다", () -> {
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템 인스턴스 생성
 
             // 잔액 조회
             double balance = stockTrading.getAccountBalance();
 
             // 초기 잔액 검증
-            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다.");
+            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000원 이여야 합니다.");
             System.out.println("초기 잔액: ₩" + balance);
         }));
 
