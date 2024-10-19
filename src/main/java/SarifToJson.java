@@ -26,13 +26,12 @@ public class SarifToJson { // SarifToJson 클래스 정의
             ObjectMapper objectMapper = new ObjectMapper(); // JSON 변환을 위한 ObjectMapper 객체 생성
             JsonNode sarifData = objectMapper.readTree(sarifFile); // SARIF 파일을 읽어 JsonNode로 변환
 
-            // "runs" 노드 가져오기
-            JsonNode runs = sarifData.get("runs"); // SARIF 데이터에서 "runs" 노드 가져오기
-            // "runs" 노드가 배열인지 확인
+            JsonNode runs = sarifData.get("runs"); // SARIF 데이터에서 runs 노드 가져오기
+            // runs 노드가 배열인지 확인
             if (runs != null && runs.isArray()) { // runs가 null이 아니고 배열인 경우
                 for (JsonNode run : runs) { // 각 run 노드에 대해
-                    JsonNode results = run.get("results"); // 현재 run의 "results" 노드 가져오기
-                    // "results" 노드가 배열인지 확인
+                    JsonNode results = run.get("results"); // 현재 run의 results 노드 가져오기
+                    // results 노드가 배열인지 확인
                     if (results != null && results.isArray()) { // results가 null이 아니고 배열인 경우
                         for (JsonNode result : results) { // 각 result에 대해
                             // ruleId와 message를 가져오고 없으면 "N/A"로 설정

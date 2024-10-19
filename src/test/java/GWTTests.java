@@ -98,22 +98,27 @@ public class GWTTests {
         tests.add(DynamicTest.dynamicTest("삼성 주식을 10주 구매할 때 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성합니다.
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
-            stockTrading.displayPortfolio(); // 포트폴리오 상태(잔액) 출력
             double initialBalance = stockTrading.getAccountBalance("123456"); // 초기 잔액을 가져옵니다.
-
+    
             // When: 삼성 주식 10주 구매 시도
             boolean result = stockTrading.buyStock("123456", "삼성", 10); // '삼성' 주식 10주를 구매합니다.
 
             // Then: 주식 구매 성공 여부 및 잔액 검증
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 확인합니다.
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 주식을 구매한 후 잔액이 감소했는지 확인합니다.
+    
+            // 현재 잔액 출력
+            double currentBalance = stockTrading.getAccountBalance("123456");
+            System.out.println("매수 후 현재 잔액: $" + currentBalance); // 매수 후 잔액 출력
+    
+            Assertions.assertTrue(currentBalance < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 주식을 구매한 후 잔액이 감소했는지 확인합니다.
         }));
+
 
         // 현대 주식을 판매하는 테스트
         tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
             // Given: 주식 거래 시스템을 사용하기 위한 객체를 생성하고 현대 주식 5주 구매
             StockTrading stockTrading = new StockTrading(); // 주식 거래 시스템의 새로운 인스턴스를 만듭니다.
-            stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 구매합니다.
+            stockTrading.buyStock("123456", "현대", 5); // '현대' 주식 5주를 '123456' 계좌로 구매합니다.
             double initialBalance = stockTrading.getAccountBalance("123456"); // 초기 잔액을 가져옵니다.
 
             // When: 현대 주식 2주 판매 시도
@@ -121,12 +126,18 @@ public class GWTTests {
 
             // Then: 주식 판매 성공 여부 및 잔액 검증
             Assertions.assertTrue(result, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 확인합니다.
-            Assertions.assertTrue(stockTrading.getAccountBalance("123456") > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
-            
+    
+            // 현재 잔액 출력
+            double currentBalance = stockTrading.getAccountBalance("123456");
+            System.out.println("매도 후 현재 잔액: $" + currentBalance); // 매도 후 잔액 출력
+
+            Assertions.assertTrue(currentBalance > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
+    
             // Then: 주식 수가 올바르게 감소했는지 확인
-            int remainingStocks = stockTrading.getStockCount("123456", "현대"); // '현대' 주식 수를 확인합니다.
-            Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 확인합니다.
+            int remainingStocks = stockTrading.getStockCount("123456", "현대"); // '현대' 주식 수 확인
+            Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수 확인
         }));
+
 
         // 초기 잔액 확인 테스트
         tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000달러여야 한다", () -> {

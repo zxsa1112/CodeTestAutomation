@@ -50,7 +50,7 @@ public class SarifToPdf { // SarifToPdf 클래스 정의
         summary.add("CodeQL 분석 요약"); // 요약 제목 추가
         summary.add("------------------------"); // 구분선 추가
 
-        JSONArray runs = sarifJson.getJSONArray("runs"); // 'runs' 배열 가져오기
+        JSONArray runs = sarifJson.getJSONArray("runs"); // runs 배열 가져오기
         // 중복 방지를 위한 Set 사용
         HashSet<String> uniqueProblems = new HashSet<>(); // 중복 문제를 저장할 해시 세트
         int totalIssues = 0; // 총 문제 수 추적
@@ -58,7 +58,7 @@ public class SarifToPdf { // SarifToPdf 클래스 정의
 
         for (int i = 0; i < runs.length(); i++) { // 각 run에 대해 반복
             JSONObject run = runs.getJSONObject(i); // 현재 run 객체 가져오기
-            JSONArray results = run.getJSONArray("results"); // 'results' 배열 가져오기
+            JSONArray results = run.getJSONArray("results"); // results 배열 가져오기
             totalIssues += results.length(); // 발견된 문제 수 추가
 
             for (int j = 0; j < results.length(); j++) { // 각 result에 대해 반복
