@@ -8,6 +8,11 @@ import org.junit.jupiter.api.DynamicTest; // 테스트 결과를 검증하기 �
 import org.junit.jupiter.api.TestFactory; // 동적 테스트를 생성하는 클래스
 
 public class GWTTests {
+    private StockTrading stockTrading; // StockTrading 인스턴스 생성
+
+    public GWTTests() {
+        this.stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 초기화
+    }
 
     @TestFactory // 동적 테스트를 만드는 메소드
     Collection<DynamicTest> testDynamicGWT() {
@@ -24,6 +29,7 @@ public class GWTTests {
         }
 
         dynamicTests.addAll(createGWTTestsForStockTrading()); // 주식 거래 관련 테스트 추가
+        dynamicTests.add(DynamicTest.dynamicTest("포트폴리오 상태 출력", () -> stockTrading.displayPortfolio())); // 포트폴리오 상태 출력 추가
 
         return dynamicTests; // 생성된 동적 테스트를 반환
     }
@@ -71,8 +77,6 @@ public class GWTTests {
     private Collection<DynamicTest> createGWTTestsForStockTrading() { // 주식 거래 시스템에 대한 GWT 테스트를 생성하는 메소드
         Collection<DynamicTest> tests = new ArrayList<>(); // 주식 거래 테스트를 저장할 리스트 생성
 
-        StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
-
         // 삼성 주식을 구매하는 테스트
         tests.add(DynamicTest.dynamicTest("삼성 주식을 10주 구매할 때 성공해야 한다", () -> {
             double initialBalance = stockTrading.getAccountBalance(); // 초기 잔액을 가져온다
@@ -80,7 +84,6 @@ public class GWTTests {
 
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 검증
             Assertions.assertTrue(stockTrading.getAccountBalance() < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 구매 후 잔액이 줄어들어야 함을 검증
-            
         }));
 
         // 현대 주식을 판매하는 테스트
@@ -95,9 +98,13 @@ public class GWTTests {
 
             int remainingStocks = stockTrading.getStockCount("현대"); // 남은 현대 주식 수 확인
             Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 검증
-
         }));
 
         return tests; // 모든 테스트 목록을 반환
+    }
+
+    public static void main(String[] args) {
+        GWTTests tests = new GWTTests();
+        tests.testDynamicGWT(); // 테스트 실행
     }
 }
