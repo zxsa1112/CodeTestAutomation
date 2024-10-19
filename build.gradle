@@ -1,26 +1,26 @@
 plugins {
-    id 'java' // Java 플러그인 적용
-    id 'application' // 애플리케이션 플러그인 적용
+    id 'java' // Java 플러그인 적용: Java 프로젝트로 설정
+    id 'application' // 애플리케이션 플러그인 적용: 애플리케이션 형태로 실행 가능
 }
 
-group 'com.kohyunwoo.kisorder' // 그룹 ID 설정
+group 'com.kohyunwoo.kisorder' // 프로젝트의 그룹 ID 설정
 version '1.0-SNAPSHOT' // 프로젝트 버전 설정
 
 repositories {
-    mavenCentral() // Maven Central 저장소 사용
+    mavenCentral() // Maven Central 저장소를 사용하여 의존성 관리
 }
 
 dependencies {
-    implementation 'org.json:json:20240303' // JSON 처리 라이브러리 의존성 추가
-    implementation 'org.apache.pdfbox:pdfbox:2.0.28' // PDF 생성 및 조작을 위한 PDFBox 라이브러리 의존성 추가
-    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.28' // PDFBox 도구 라이브러리 의존성 추가
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 의존성 추가 (테스트)
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2' // JUnit 5 실행 엔진 의존성 추가 (테스트)
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.json:json:20240303' // JSON 처리 라이브러리 추가
+    implementation 'org.apache.pdfbox:pdfbox:2.0.28' // PDF 생성 및 조작을 위한 PDFBox 라이브러리 추가
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.28' // PDFBox 도구 라이브러리 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // JUnit 5 의존성 추가 (테스트 목적)
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2' // JUnit 5 실행 엔진 의존성 추가 (테스트 목적)
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2' // JSON 직렬화/역직렬화를 위한 Jackson 라이브러리 추가
 }
 
 application {
-    mainClass = 'SarifToJson' // 애플리케이션의 진입점(main 클래스) 설정
+    mainClass = 'SarifToJson' // 애플리케이션의 진입점 설정 (main 클래스)
 }
 
 jar {
@@ -29,9 +29,9 @@ jar {
     }
     from {
         // 런타임 클래스패스를 포함하여 JAR 파일 생성
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } // 런타임 클래스패스의 모든 파일 포함
     }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 중복된 파일 포함 설정
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // 중복된 파일도 포함하도록 설정
 
     // 리소스 폴더에서 TTF 폰트 파일 포함
     from('src/main/resources/fonts') {
@@ -51,9 +51,9 @@ sourceSets {
 }
 
 test {
-    useJUnitPlatform() // JUnit 플랫폼 사용 설정
+    useJUnitPlatform() // JUnit 플랫폼 사용 설정: JUnit 5 기반 테스트 실행
     testLogging {
-        events "passed", "skipped", "failed" // 테스트 결과 로그 이벤트 설정
+        events "passed", "skipped", "failed" // 테스트 결과 로그에 포함할 이벤트 설정
     }
     reports {
         junitXml.required = true // JUnit XML 리포트 생성 설정
@@ -61,7 +61,8 @@ test {
     }
 }
 
-tasks.register('createPdfReportDir') { // PDF 보고서 디렉토리 생성 태스크 등록
+// PDF 보고서 디렉토리 생성 태스크 등록
+tasks.register('createPdfReportDir') { 
     doLast {
         mkdir "${buildDir}/reports/pdf" // 빌드 디렉토리 내에 PDF 리포트 디렉토리 생성
     }

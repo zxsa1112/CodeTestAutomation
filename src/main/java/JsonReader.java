@@ -8,7 +8,7 @@ public class JsonReader { // JsonReader 클래스 정의
     public static void main(String[] args) { // 프로그램의 진입점, main 메서드 시작
         ObjectMapper objectMapper = new ObjectMapper(); // JSON 처리를 위한 ObjectMapper 객체 생성
         try {
-            JsonNode jsonNode = objectMapper.readTree(new File("path/to/your/file.json"));  // JSON 파일을 읽어 JsonNode 객체로 변환
+            JsonNode jsonNode = objectMapper.readTree(new File("results/sarif-results.sarif"));  // JSON 파일을 읽어 JsonNode 객체로 변환
             jsonNode.get("runs").forEach(run -> {   // JSON 데이터 처리 시작 'runs'라는 키에 해당하는 배열을 반복
                 run.get("results").forEach(result -> {  // 각 'run'의 'results' 배열을 반복
                     System.out.println("Rule ID: " + result.get("ruleId").asText());    // 발견된 문제의 규칙 ID 출력
