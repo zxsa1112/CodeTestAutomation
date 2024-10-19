@@ -6,9 +6,11 @@ public class StockTrading {
     private Map<String, Double> stockPrices; // 주식 가격 저장
     private Map<String, Integer> portfolio; // 보유 주식 수량 저장
     private double cash; // 현금 잔액
+    private String accountNumber; // 계좌 번호 추가
 
     // 생성자: 초기값 설정
-    public StockTrading() {
+    public StockTrading(String accountNumber) { // 계좌 번호 매개변수 추가
+        this.accountNumber = accountNumber; // 계좌 번호 설정
         stockPrices = new HashMap<>(); // 주식 가격 저장을 위한 해시맵 초기화
         portfolio = new HashMap<>(); // 포트폴리오(보유 주식) 저장을 위한 해시맵 초기화
         cash = 100000.0; // 초기 현금 잔액 설정
@@ -20,7 +22,7 @@ public class StockTrading {
     }
 
     // 주식 구매 메서드
-    public boolean buyStock(String accountNumber, String stockCode, int quantity) {
+    public boolean buyStock(String stockCode, int quantity) {
         // 유효한 주식 코드인지 확인
         if (!stockPrices.containsKey(stockCode)) {
             System.out.println("존재하지 않는 주식 코드입니다.");
@@ -42,7 +44,7 @@ public class StockTrading {
     }
 
     // 주식 판매 메서드
-    public boolean sellStock(String accountNumber, String stockCode, int quantity) {
+    public boolean sellStock(String stockCode, int quantity) {
         // 보유 주식 수량 확인
         if (!portfolio.containsKey(stockCode) || portfolio.get(stockCode) < quantity) {
             System.out.println("보유 주식이 부족합니다.");
@@ -60,7 +62,7 @@ public class StockTrading {
     }
 
     // 계좌 잔액 조회 메서드
-    public double getAccountBalance(String accountNumber) {
+    public double getAccountBalance() {
         return cash; // 현재 잔액 반환
     }
 
@@ -74,25 +76,25 @@ public class StockTrading {
     }
 
     // 주식 수량 조회 메서드 추가
-    public int getStockCount(String accountNumber, String stockCode) {
+    public int getStockCount(String stockCode) {
         return portfolio.getOrDefault(stockCode, 0); // 보유 주식 수량 반환, 없으면 0 반환
     }
 
     // 테스트를 위한 메서드들
     public boolean testBuyStock() {
         double initialBalance = cash; // 초기 잔액 저장
-        boolean result = buyStock("123456", "삼성", 10); // 삼성 주식으로 테스트
+        boolean result = buyStock("삼성", 10); // 삼성 주식으로 테스트
         return result && cash < initialBalance; // 매수 성공 및 잔액 변화 확인
     }
 
     public boolean testSellStock() {
         double initialBalance = cash; // 초기 잔액 저장
-        buyStock("123456", "현대", 5); // 현대 주식 5주 구매
-        boolean result = sellStock("123456", "현대", 2); // 현대 주식 2주 판매
+        buyStock("현대", 5); // 현대 주식 5주 구매
+        boolean result = sellStock("현대", 2); // 현대 주식 2주 판매
         return result && cash > initialBalance; // 매도 성공 및 잔액 변화 확인
     }
 
     public double testGetAccountBalance() {
-        return getAccountBalance("123456"); // 잔액 조회 테스트
+        return getAccountBalance(); // 잔액 조회 테스트
     }
 }
