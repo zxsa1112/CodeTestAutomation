@@ -9,40 +9,38 @@ on: # 워크플로우 트리거 정의
     - cron: '0 14 * * 5' # 매주 금요일 오후 2시에 실행
 
 jobs: # 작업 정의
-  analyze: # "analyze"라는 이름의 작업 정의
+  analyze: # 분석 작업 정의
     name: Analyze (${{ matrix.language }}) # 작업 이름에 언어 정보 포함
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }} # Swift 언어의 경우 macOS에서, 그 외의 경우 Ubuntu에서 실행
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }} # 언어에 따라 OS 선택
     
     permissions: # 작업에 필요한 권한 정의
       security-events: write # 보안 이벤트 쓰기 권한
-      packages: read # 패키지 읽기 권한
-      actions: read # 액션 읽기 권한
-      contents: read # 콘텐츠 읽기 권한
+      contents: read # 코드 내용 읽기 권한
     
     strategy: # 전략 정의
-      fail-fast: false # 작업 실패 시, 다른 작업도 계속 실행
-      matrix: # 행렬 전략을 사용하여 다양한 환경에서 실행
+      fail-fast: false # 하나의 작업 실패 시, 다른 작업 계속 실행
+      matrix: # 다양한 환경에서 실행
         include:
-        - language: java-kotlin # Java 및 Kotlin 언어에 대한 설정
+        - language: java # Java 언어 설정
           build-mode: manual # 수동 빌드 모드 설정
 
-    steps: # 작업 내의 단계 정의
-    - name: Checkout repository # 리포지토리 체크아웃 단계
-      uses: actions/checkout@v3 # 리포지토리를 현재 작업 디렉토리에 체크아웃
+    steps: # 작업 내 단계 정의
+    - name: Checkout repository # 코드 리포지토리 체크아웃
+      uses: actions/checkout@v3 # 현재 디렉토리에 코드 가져오기
 
-    - name: Initialize CodeQL # CodeQL 초기화 단계
+    - name: Initialize CodeQL # CodeQL 초기화
       uses: github/codeql-action/init@v3 # CodeQL 초기화 액션 사용
       with:
         languages: ${{ matrix.language }} # 사용할 언어 설정
-        queries: security-and-quality # 사용할 쿼리 설정
+        queries: security-and-quality # 보안 및 품질 쿼리 사용
 
-    - name: Build # 빌드 단계
+    - name: Build # 프로젝트 빌드
       run: ./gradlew build  # Gradle 빌드 실행
 
-    - name: Test # 테스트 실행 단계
+    - name: Test # 테스트 실행
       run: ./gradlew test   # Gradle 테스트 실행
 
-    - name: Upload test reports # 테스트 결과 업로드 단계
+    - name: Upload test reports # 테스트 결과 업로드
       uses: actions/upload-artifact@v3 # 아티팩트 업로드 액션 사용
       with:
         name: test-reports # 아티팩트 이름
@@ -63,41 +61,39 @@ jobs: # 작업 정의
         category: "/language:${{matrix.language}}" # 언어 카테고리 설정
         output: results # 분석 결과 경로 설정
 
-    - name: Upload SARIF file # SARIF 파일 업로드 단계
+    - name: Upload SARIF file # SARIF 분석 결과 파일 업로드 단계
       uses: actions/upload-artifact@v3 # 아티팩트 업로드 액션 사용
       with:
-        name: sarif-results # 아티팩트 이름
-        path: results/*.sarif # SARIF 파일 경로
+        name: sarif-results # 업로드할 아티팩트 이름
+        path: results/*.sarif # 업로드할 SARIF 파일 경로
 
-    - name: Set up JDK 21 # JDK 21 설정 단계
+    - name: Set up JDK 21 # JDK 21 버전 설정 단계
       uses: actions/setup-java@v3 # Java 환경 설정 액션 사용
       with:
-        java-version: '21' # Java 버전 설정
-        distribution: 'temurin' # Temurin 배포판 사용
+        java-version: '21' # 사용할 Java 버전 설정
+        distribution: 'temurin' # Temurin 자바 배포판 사용
 
     - name: Generate PDF report # PDF 보고서 생성 단계
       run: | # 여러 줄 명령 실행
-        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToPdf results/*.sarif build/reports/pdf/report.pdf # SARIF 파일을 PDF로 변환
-      env:
-        SARIF_FILE: results/*.sarif  # SARIF 파일 경로 설정
+        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToPdf results/*.sarif build/reports/pdf/report.pdf
 
-    - name: Upload PDF report # PDF 보고서 업로드 단계
+    - name: Upload PDF report # 생성된 PDF 보고서 업로드 단계
       uses: actions/upload-artifact@v3 # 아티팩트 업로드 액션 사용
       with:
-        name: CodeQL-PDF-Report # 아티팩트 이름
-        path: build/reports/pdf/report.pdf  # 생성된 PDF 파일 경로
+        name: CodeQL-PDF-Report # 업로드할 PDF 아티팩트 이름
+        path: build/reports/pdf/report.pdf  # PDF 파일 경로
 
     - name: Create JSON output directory # JSON 출력을 위한 디렉토리 생성
       run: mkdir -p build/reports/json  # JSON 출력을 위한 디렉토리 생성
 
     - name: Parse SARIF to JSON # SARIF 파일을 JSON으로 변환
       run: |
-        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToJson results/*.sarif > build/reports/json/sarif-parsed.json
+        java -cp build/libs/AUTOCODE-1.0-SNAPSHOT.jar:build/libs/* SarifToJson results/*.sarif > build/reports/json/sarif-parsed.json 
       env:
         SARIF_FILE: results/*.sarif  # SARIF 파일 경로 설정
 
     - name: Upload Parsed SARIF JSON # 변환된 JSON 파일 업로드
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3 # 아티팩트 업로드 액션 사용
       with:
-        name: sarif-json
+        name: sarif-json # 업로드할 JSON 아티팩트 이름
         path: build/reports/json/sarif-parsed.json  # JSON 파일 경로
