@@ -36,7 +36,7 @@ public class GWTTests {
             Object testInstance = testClass.getDeclaredConstructor().newInstance(); // 클래스의 인스턴스를 생성
 
             for (Method method : testClass.getDeclaredMethods()) { // 클래스의 모든 메소드를 확인
-                if (method.getName().startsWith("test")) { // 메소드 이름이 "test"로 시작하면
+                if (method.getName().startsWith("test")) { // 메소드 이름이 test로 시작하면
                     tests.add(createDynamicTest(testInstance, method)); // 동적 테스트를 추가
                 }
             }
@@ -76,29 +76,29 @@ public class GWTTests {
             StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
             double initialBalance = stockTrading.getAccountBalance(); // 초기 잔액을 가져온다
 
-            boolean result = stockTrading.buyStock("삼성", 10); // '삼성' 주식 10주 구매
+            boolean result = stockTrading.buyStock("삼성", 10); // 삼성 주식 10주 구매
 
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 검증
             Assertions.assertTrue(stockTrading.getAccountBalance() < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 구매 후 잔액이 줄어들어야 함을 검증
 
-            stockTrading.displayPortfolio();
+            stockTrading.displayPortfolio();    // 포트폴리오 상태(잔액) 출력
         }));
 
         // 현대 주식을 판매하는 테스트
         tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
             StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
-            stockTrading.buyStock("현대", 5); // '현대' 주식 5주 구매
+            stockTrading.buyStock("현대", 5); // 현대 주식 5주 구매
             double initialBalance = stockTrading.getAccountBalance(); // 초기 잔액을 가져온다
 
-            boolean result = stockTrading.sellStock("현대", 2); // '현대' 주식 2주 판매
+            boolean result = stockTrading.sellStock("현대", 2); // 현대 주식 2주 판매
 
             Assertions.assertTrue(result, "주식 판매가 성공해야 합니다."); // 주식 판매가 성공했는지 검증
             Assertions.assertTrue(stockTrading.getAccountBalance() > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 판매 후 잔액이 증가해야 함을 검증
 
-            int remainingStocks = stockTrading.getStockCount("현대"); // 남은 '현대' 주식 수 확인
+            int remainingStocks = stockTrading.getStockCount("현대"); // 남은 현대 주식 수 확인
             Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 검증
 
-            stockTrading.displayPortfolio();
+            stockTrading.displayPortfolio();    // 포트폴리오 상태(잔액) 출력
         }));
 
         return tests; // 모든 테스트 목록을 반환

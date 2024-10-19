@@ -1,8 +1,7 @@
 import java.util.HashMap; // 해시맵을 사용하기 위한 임포트
 import java.util.Map; // 맵 인터페이스를 사용하기 위한 임포트
 
-public class StockTrading {
-    // 주식 가격과 보유 주식 수량, 현금 잔액을 저장하는 필드
+public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔액을 저장하는 필드
     private Map<String, Double> stockPrices; // 주식 가격 저장
     private Map<String, Integer> portfolio; // 보유 주식 수량 저장
     private double cash; // 현금 잔액
@@ -45,8 +44,7 @@ public class StockTrading {
 
     // 주식 판매 메서드
     public boolean sellStock(String stockCode, int quantity) {
-        // 보유 주식 수량 확인
-        if (!portfolio.containsKey(stockCode) || portfolio.get(stockCode) < quantity) {
+        if (!portfolio.containsKey(stockCode) || portfolio.get(stockCode) < quantity) { // 보유 주식 수량 확인
             System.out.println("보유 주식이 부족합니다.");
             return false; // 보유 주식이 부족한 경우 false 반환
         }
