@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.File;    // 동적 테스트를 생성하기 위한 클래스
 import java.lang.reflect.Method; // 파일 작업을 위해 필요한 클래스
 import java.util.ArrayList; // 메소드 정보를 가져오기 위한 클래스
 import java.util.Collection; // 동적 테스트를 저장할 리스트 클래스
@@ -80,6 +80,8 @@ public class GWTTests {
 
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 검증
             Assertions.assertTrue(stockTrading.getAccountBalance() < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 구매 후 잔액이 줄어들어야 함을 검증
+
+            stockTrading.displayPortfolio();
         }));
 
         // 현대 주식을 판매하는 테스트
@@ -95,6 +97,8 @@ public class GWTTests {
 
             int remainingStocks = stockTrading.getStockCount("현대"); // 남은 '현대' 주식 수 확인
             Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 검증
+
+            stockTrading.displayPortfolio();
         }));
 
         return tests; // 모든 테스트 목록을 반환
