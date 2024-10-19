@@ -71,11 +71,11 @@ public class GWTTests {
     private Collection<DynamicTest> createGWTTestsForStockTrading() { // 주식 거래 시스템에 대한 GWT 테스트를 생성하는 메소드
         Collection<DynamicTest> tests = new ArrayList<>(); // 주식 거래 테스트를 저장할 리스트 생성
 
+        StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
+
         // 삼성 주식을 구매하는 테스트
         tests.add(DynamicTest.dynamicTest("삼성 주식을 10주 구매할 때 성공해야 한다", () -> {
-            StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
             double initialBalance = stockTrading.getAccountBalance(); // 초기 잔액을 가져온다
-
             boolean result = stockTrading.buyStock("삼성", 10); // 삼성 주식 10주 구매
 
             Assertions.assertTrue(result, "주식 구매가 성공해야 합니다."); // 주식 구매가 성공했는지 검증
@@ -87,7 +87,6 @@ public class GWTTests {
 
         // 현대 주식을 판매하는 테스트
         tests.add(DynamicTest.dynamicTest("현대 주식을 2주 판매할 때 성공해야 한다", () -> {
-            StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
             stockTrading.buyStock("현대", 5); // 현대 주식 5주 구매
             double initialBalance = stockTrading.getAccountBalance(); // 초기 잔액을 가져온다
 
