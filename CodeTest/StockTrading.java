@@ -19,7 +19,7 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
     }
 
     // 주식 구매 메서드
-    public boolean buyStock(String accountNumber, String stockCode, int quantity) {
+    public boolean buyStock(String stockCode, int quantity) {
         if (!stockPrices.containsKey(stockCode)) {  // 주식 코드가 유효한지 확인
             System.out.println("존재하지 않는 주식 코드입니다.");   // 잘못된 주식 코드일 경우 메시지 출력
             return false; // 유효하지 않은 경우 false 반환
@@ -39,7 +39,7 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
     }
 
     // 주식 판매 메서드
-    public boolean sellStock(String accountNumber, String stockCode, int quantity) {
+    public boolean sellStock(String stockCode, int quantity) {
         if (!portfolio.containsKey(stockCode) || portfolio.get(stockCode) < quantity) { // 보유 주식 수량 확인
             System.out.println("보유 주식이 부족합니다.");  // 보유 주식이 부족할 경우 메시지 출력
             return false; // 보유 주식이 부족한 경우 false 반환
