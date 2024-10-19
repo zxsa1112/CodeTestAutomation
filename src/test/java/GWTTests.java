@@ -108,7 +108,7 @@ public class GWTTests {
     
             // 현재 잔액 출력
             double currentBalance = stockTrading.getAccountBalance("123456");
-            System.out.println("매수 후 현재 잔액: $" + currentBalance); // 매수 후 잔액 출력
+            System.out.println("매수 후 현재 잔액: ₩" + currentBalance); // 매수 후 잔액 출력
     
             Assertions.assertTrue(currentBalance < initialBalance, "주식을 구매한 후 잔액이 줄어야 합니다."); // 주식을 구매한 후 잔액이 감소했는지 확인합니다.
         }));
@@ -129,7 +129,7 @@ public class GWTTests {
     
             // 현재 잔액 출력
             double currentBalance = stockTrading.getAccountBalance("123456");
-            System.out.println("매도 후 현재 잔액: $" + currentBalance); // 매도 후 잔액 출력
+            System.out.println("매도 후 현재 잔액: ₩" + currentBalance); // 매도 후 잔액 출력
 
             Assertions.assertTrue(currentBalance > initialBalance, "주식을 판매한 후 잔액이 증가해야 합니다."); // 주식을 판매한 후 잔액이 증가했는지 확인합니다.
     
@@ -149,7 +149,7 @@ public class GWTTests {
 
             // Then: 초기 잔액 검증
             Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액 확인
-            System.out.println("초기 잔액: " + balance); // 테스트 결과 출력
+            System.out.println("초기 잔액: ₩" + balance); // 테스트 결과 출력
         }));
 
         return tests; // 모든 테스트 목록을 반환합니다.
