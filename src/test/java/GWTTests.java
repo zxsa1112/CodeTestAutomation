@@ -14,7 +14,7 @@ public class GWTTests {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();   // 동적 테스트를 저장할 리스트 생성
 
         File workspace = new File(System.getProperty("user.dir"));  // 현재 작업 디렉토리를 가져온다
-        File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java")); // CodeTest 폴더 내의 .java 파일 찾기
+        File[] javaFiles = workspace.listFiles((dir, name) -> name.endsWith(".java") && !name.equals("GWTTests.java")); // .java 파일을 찾고 GWTTests.java는 제외
 
         if (javaFiles != null) {    // 찾은 Java 파일에 대해 테스트 생성
             for (File file : javaFiles) {
