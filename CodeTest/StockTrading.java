@@ -88,7 +88,7 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
         return result && cash > initialBalance; // 매도 성공 및 잔액 변화 확인
     }
 
-    public double testGetAccountBalance() {
+    public double testGetAccoasdftBalance() {
         return getAccountBalance(); // 잔액 조회 테스트
     }
 }
