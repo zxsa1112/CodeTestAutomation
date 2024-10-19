@@ -43,7 +43,7 @@ public class GWTTests {
         } catch (Exception e) {
             System.out.println("Error processing class " + className + ": " + e.getMessage());  // 에러 메시지 출력
             tests.add(DynamicTest.dynamicTest("Error in " + className, 
-                () -> Assertions.fail("Error: " + e.getMessage())));    // 에러 테스트 추가
+                () -> Assertions.fail("Error: " + e.getMessage()));    // 에러 테스트 추가
         }
 
         return tests;   // 생성된 테스트를 반환
