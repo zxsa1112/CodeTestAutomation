@@ -66,7 +66,7 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue() + "주"); // 각 주식의 보유 수량 출력
         }
-        System.out.println("현금 잔액: $" + cash); // 현재 잔액 출력
+        System.out.println("현금 잔액: ₩" + cash); // 현재 잔액 출력
     }
 
     // 주식 수량 조회 메서드 추가
@@ -85,8 +85,11 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
         double initialBalance = cash; // 초기 잔액 저장
         buyStock("123456", "현대", 5); // 현대 주식 5주 구매
         boolean result = sellStock("123456", "현대", 2); // 현대 주식 2주 판매 시도
-        return result && cash > initialBalance; // 매도 성공 및 잔액 변화 확인
+        double currentBalance = cash; // 현재 잔액 확인
+        System.out.println("판매 후 잔액: ₩" + currentBalance); // 잔액 출력
+        return result && currentBalance > initialBalance; // 매도 성공 및 잔액 증가 확인
     }
+    
 
     public double testGetAccountBalance() {
         return getAccountBalance("123456"); // 잔액 조회 테스트
