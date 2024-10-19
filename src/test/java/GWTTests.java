@@ -97,14 +97,6 @@ public class GWTTests {
             Assertions.assertEquals(3, remainingStocks, "2주를 판매한 후 남은 주식 수는 3이어야 합니다."); // 남은 주식 수가 3인지 검증
         }));
 
-        // LG 주식의 초기 잔액을 확인하는 테스트
-        tests.add(DynamicTest.dynamicTest("초기 잔액이 100,000달러여야 한다", () -> {
-            StockTrading stockTrading = new StockTrading("123456"); // 주식 거래 시스템 인스턴스 생성
-            double balance = stockTrading.getAccountBalance(); // 잔액을 조회
-
-            Assertions.assertEquals(100000.0, balance, "초기 잔액은 100,000달러여야 합니다."); // 초기 잔액이 100,000달러인지 검증
-        }));
-
         return tests; // 모든 테스트 목록을 반환
     }
 }

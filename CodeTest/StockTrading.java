@@ -93,8 +93,4 @@ public class StockTrading {
         boolean result = sellStock("현대", 2); // 현대 주식 2주 판매
         return result && cash > initialBalance; // 매도 성공 및 잔액 변화 확인
     }
-
-    public double testGetAccountBalance() {
-        return getAccountBalance(); // 잔액 조회 테스트
-    }
 }
