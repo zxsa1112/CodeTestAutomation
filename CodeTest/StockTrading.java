@@ -89,6 +89,6 @@ public class StockTrading { // 주식 가격과 보유 주식 수량, 현금 잔
     }
 
     public double testGetAccountBalance() {
-        return getAountBalance(); // 잔액 조회 테스트
+        return getAccountBalance(); // 잔액 조회 테스트
     }
 }
